@@ -45,4 +45,10 @@ public class CommandReaderShould {
     {
         assertThat(commandReader.parse("Alice follows Bob"), is(instanceOf(FollowCommand.class)));
     }
+
+    @Test
+    public void returnWallCommandWhenRequestIsWall()
+    {
+        assertThat(commandReader.parse("Alice wall"), is(instanceOf(WallCommand.class)));
+    }
 }

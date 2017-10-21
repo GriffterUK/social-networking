@@ -21,6 +21,10 @@ public class CommandFactory {
                 break;
             case "follows":
                 command = new FollowCommand();
+                break;
+            case "wall":
+                command = new WallCommand();
+                break;
         }
 
         return command;
