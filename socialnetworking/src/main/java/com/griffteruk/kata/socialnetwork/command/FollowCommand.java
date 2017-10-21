@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by User on 21/10/2017.
  */
-public class ReadCommand implements Command {
+public class FollowCommand implements Command {
 
     @Override
     public List<String> result() {

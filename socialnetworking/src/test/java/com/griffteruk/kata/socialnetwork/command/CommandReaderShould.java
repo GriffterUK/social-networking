@@ -39,4 +39,10 @@ public class CommandReaderShould {
     {
         assertThat(commandReader.parse("Alice"), is(instanceOf(ReadCommand.class)));
     }
+
+    @Test
+    public void returnFollowCommandWhenRequestIsFollow()
+    {
+        assertThat(commandReader.parse("Alice follows Bob"), is(instanceOf(FollowCommand.class)));
+    }
 }

@@ -19,6 +19,8 @@ public class CommandFactory {
                     command = new ReadCommand();
                 }
                 break;
+            case "follows":
+                command = new FollowCommand();
         }
 
         return command;

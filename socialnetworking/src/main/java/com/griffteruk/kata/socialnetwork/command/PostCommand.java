@@ -1,5 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +10,6 @@ public class PostCommand implements Command {
 
     @Override
     public List<String> result() {
-        return null;
+        return new ArrayList<>();
     }
 }
