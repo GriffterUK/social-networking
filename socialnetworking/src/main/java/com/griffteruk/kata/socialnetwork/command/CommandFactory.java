@@ -11,8 +11,13 @@ public class CommandFactory {
 
         switch (operation)
         {
-            case "post":
+            case "->":
                 command = new PostCommand();
+                break;
+            case "":
+                if ( user.isEmpty() == false ) {
+                    command = new ReadCommand();
+                }
                 break;
         }
 

@@ -33,4 +33,10 @@ public class CommandReaderShould {
     {
         assertThat(commandReader.parse("Alice -> I love the weather today"), is(instanceOf(PostCommand.class)));
     }
+
+    @Test
+    public void returnReadCommandWhenRequestIsRead()
+    {
+        assertThat(commandReader.parse("Alice"), is(instanceOf(ReadCommand.class)));
+    }
 }

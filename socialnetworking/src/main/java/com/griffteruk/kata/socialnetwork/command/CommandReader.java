@@ -5,8 +5,8 @@ import java.util.regex.Pattern;
 
 public class CommandReader {
 
-    CommandFactory commandFactory = new CommandFactory();
-
+    CommandFactory commandFactory = new CommandFactory();   
+  
     public CommandReader()
     {
 
@@ -14,19 +14,16 @@ public class CommandReader {
 
     Command parse(String commandText)
     {
-        String user = "";
-        String operation = "";
-        String message = "";
+        String[] commandArguments = commandText.split(" ");
 
-        Pattern pattern = Pattern.compile("([a-zA-Z0-9 ]+) -> ([a-zA-Z0-9 ]+)");
-        Matcher matcher = pattern.matcher(commandText);
-
-        if ( matcher.find() == true ) {
-            operation = "post";
-            user = matcher.group(1);
-            message = matcher.group(2);
-        }
+        String user = commandArguments.length >= 1 ? commandArguments[0] : "";
+        String operation = commandArguments.length > 2 ? commandArguments[1] : "";
+        String message = commandArguments.length >= 3 ? coalesceStrings(commandArguments) : "";  
 
         return commandFactory.createCommand(user, operation, message);
+    }
+
+    private String coalesceStrings(String[] commandArguments) {
+        return String.join("", commandArguments);
     }
 }
