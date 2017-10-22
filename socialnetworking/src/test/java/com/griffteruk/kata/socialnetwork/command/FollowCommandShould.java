@@ -26,6 +26,9 @@ public class FollowCommandShould extends WithMockedUserRepository {
     @Test
     public void returnAnEmptyListAsResult()
     {
+        expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
+        expectUserRepositoryToFindUserByName(SOME_OTHER_EXISTING_USER_NAME);
+
         assertThat(new FollowCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME).process(),
                 is(EMPTY_LIST_OF_STRINGS));
     }

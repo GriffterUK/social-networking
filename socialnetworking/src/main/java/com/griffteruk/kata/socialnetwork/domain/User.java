@@ -7,7 +7,11 @@ import java.util.List;
  */
 public interface User {
 
-    void addPost(String message);
     String getName();
+
+    void addPost(String message);
     List<String> getPosts();
+
+    void addUserToFollow(User user);
+    List<User> getFollowedUsers();
 }
