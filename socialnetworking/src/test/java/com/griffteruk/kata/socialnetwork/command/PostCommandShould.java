@@ -14,10 +14,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class PostCommandShould {
 
     private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
+    private static final String SOME_USER_NAME = "Jim";
+    private static final String SOME_USER_MESSAGE = "Hello World!";
 
     @Test
     public void returnAnEmptyListAsResult()
     {
-        assertThat(new PostCommand().result(), is(EMPTY_LIST_OF_STRINGS));
+        assertThat(new PostCommand(SOME_USER_NAME, SOME_USER_MESSAGE).result(), is(EMPTY_LIST_OF_STRINGS));
     }
 }

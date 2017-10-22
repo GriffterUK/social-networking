@@ -12,7 +12,7 @@ public class CommandFactory {
         switch (operation)
         {
             case "->":
-                command = new PostCommand();
+                command = new PostCommand(user, message);
                 break;
             case "":
                 if ( user.isEmpty() == false ) {

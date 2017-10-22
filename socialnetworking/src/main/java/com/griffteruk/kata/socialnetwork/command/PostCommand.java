@@ -8,6 +8,12 @@ import java.util.List;
  */
 public class PostCommand implements Command {
 
+
+    public PostCommand(String user, String message) {
+
+
+    }
+
     @Override
     public List<String> result() {
         return new ArrayList<>();
