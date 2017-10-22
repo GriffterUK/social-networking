@@ -25,11 +25,19 @@ public class PostCommand implements Command {
     @Override
     public List<String> process() {
 
+        createUserIfNotExists(userName);
+
+        User user = userRepository.findUserByName(userName).get();
+        user.addPost(this.message);
+
+        return new ArrayList<>();
+    }
+
+    protected void createUserIfNotExists(String userName)
+    {
         Optional<User> optionalUser = userRepository.findUserByName(userName);
         if ( optionalUser.isPresent() == false ) {
             userRepository.createUser(userName);
         }
-
-        return new ArrayList<>();
     }
 }

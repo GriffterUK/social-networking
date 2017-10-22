@@ -7,6 +7,6 @@ import java.util.Optional;
  */
 public interface UserRepository {
 
-    boolean createUser(String name);
+    User createUser(String name);
     Optional<User> findUserByName(String name);
 }
