@@ -2,14 +2,14 @@ package com.griffteruk.kata.socialnetwork.command;
 
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+import com.griffteruk.kata.socialnetwork.domain.WithMockedUserRepository;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
  * Created by User on 21/10/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PostCommandShould {
+public class PostCommandShould extends WithMockedUserRepository {
 
     private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
 
@@ -29,9 +29,6 @@ public class PostCommandShould {
 
     private static final String NEW_USER_NAME = "Alice";
     private static final String NEW_USER_MESSAGE = "I love the weather today!";
-
-    @Mock
-    private UserRepository userRepository;
 
     @Test
     public void returnAnEmptyListAsResult()
@@ -45,7 +42,6 @@ public class PostCommandShould {
     @Test
     public void createNewUserWhenNewUserCreatesTheirFirstPost()
     {
-        expectUserRepositoryNotToFindUserByName(NEW_USER_NAME);
         expectUserRepositoryToCreateUserForName(NEW_USER_NAME);
 
         PostCommand postCommand = new PostCommand(userRepository, NEW_USER_NAME, NEW_USER_MESSAGE);
@@ -75,34 +71,7 @@ public class PostCommandShould {
 
         verify(someUser).addPost(SOME_EXISTING_USER_MESSAGE);
     }
-    
 
-    protected User expectUserRepositoryToFindUserByName(String userName)
-    {
-        User user = mock(User.class);
-        when(user.getName()).thenReturn(userName);
 
-        when(userRepository.findUserByName(userName)).thenReturn(Optional.of(user));
-        return user;
-    }
 
-    protected void expectUserRepositoryNotToFindUserByName(String userName)
-    {
-        when(userRepository.findUserByName(userName)).thenReturn(Optional.empty());
-    }
-
-    protected User expectUserRepositoryToCreateUserForName(String userName)
-    {
-        User user = mock(User.class);
-        when(user.getName()).thenReturn(userName);
-
-        when(userRepository.createUser(userName)).
-                thenReturn(user);
-
-        when(userRepository.findUserByName(userName)).
-                thenReturn(Optional.empty()).
-                thenReturn(Optional.of(user));
-
-        return user;
-    }
 }

@@ -29,7 +29,7 @@ public class CommandFactory {
                 }
                 break;
             case "follows":
-                command = new FollowCommand();
+                command = new FollowCommand(userRepository, user, message);
                 break;
             case "wall":
                 command = new WallCommand();

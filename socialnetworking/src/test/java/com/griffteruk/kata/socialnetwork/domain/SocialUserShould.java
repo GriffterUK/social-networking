@@ -9,17 +9,17 @@ import static org.hamcrest.CoreMatchers.is;
 /**
  * Created by User on 22/10/2017.
  */
-public class UserShould {
+public class SocialUserShould {
 
     private static final String SOME_USER_NAME = "Jim";
     private static final String SOME_USERS_FIRST_POST = "Hello World!";
 
-    private User someUser;
+    private SocialUser someUser;
 
     @Before
     public void initialise()
     {
-        someUser = new User(SOME_USER_NAME);
+        someUser = new SocialUser(SOME_USER_NAME);
     }
 
     @Test
@@ -32,6 +32,7 @@ public class UserShould {
     public void returnAllPostsThatWereAdded()
     {
         someUser.addPost(SOME_USERS_FIRST_POST);
+
         assertThat(numberOfPostsForUser(someUser), is(1));
         assertThat(firstPostForUser(someUser), is(SOME_USERS_FIRST_POST));
     }
