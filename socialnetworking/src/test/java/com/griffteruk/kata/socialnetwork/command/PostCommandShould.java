@@ -1,9 +1,7 @@
 package com.griffteruk.kata.socialnetwork.command;
 
 import com.griffteruk.kata.socialnetwork.domain.User;
-import com.griffteruk.kata.socialnetwork.domain.UserRepository;
 import com.griffteruk.kata.socialnetwork.domain.WithMockedUserRepository;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -24,19 +22,17 @@ public class PostCommandShould extends WithMockedUserRepository {
 
     private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
 
-    private static final String SOME_EXISTING_USER_NAME = "Jim";
-    private static final String SOME_EXISTING_USER_MESSAGE = "Hello World!";
-
-    private static final String NEW_USER_NAME = "Alice";
-    private static final String NEW_USER_MESSAGE = "I love the weather today!";
+    private static final String SOME_EXISTING_USER_POST = "What a wonderful day!";
+    private static final String NEW_USER_POST = "Hello World!";
+    private static final String EMPTY_POST = "";
 
     @Test
     public void returnAnEmptyListAsResult()
     {
         expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
 
-        PostCommand postCommand = new PostCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_MESSAGE);
-        assertThat(postCommand.process(), is(EMPTY_LIST_OF_STRINGS));
+        assertThat(processPostCommand(SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_POST),
+                is(EMPTY_LIST_OF_STRINGS));
     }
 
     @Test
@@ -44,8 +40,7 @@ public class PostCommandShould extends WithMockedUserRepository {
     {
         expectUserRepositoryToCreateUserForName(NEW_USER_NAME);
 
-        PostCommand postCommand = new PostCommand(userRepository, NEW_USER_NAME, NEW_USER_MESSAGE);
-        postCommand.process();
+        processPostCommand(NEW_USER_NAME, EMPTY_POST);
 
         verify(userRepository).createUser(NEW_USER_NAME);
     }
@@ -55,10 +50,9 @@ public class PostCommandShould extends WithMockedUserRepository {
     {
         expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
 
-        PostCommand postCommand = new PostCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_MESSAGE);
-        postCommand.process();
+        processPostCommand(SOME_EXISTING_USER_NAME, EMPTY_POST);
 
-        verify(userRepository, never()).createUser(NEW_USER_NAME);
+        verify(userRepository, never()).createUser(SOME_EXISTING_USER_NAME);
     }
 
     @Test
@@ -66,12 +60,15 @@ public class PostCommandShould extends WithMockedUserRepository {
     {
         User someUser = expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
 
-        PostCommand postCommand = new PostCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_MESSAGE);
-        postCommand.process();
+        processPostCommand(SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_POST );
 
-        verify(someUser).addPost(SOME_EXISTING_USER_MESSAGE);
+        verify(someUser).addPost(SOME_EXISTING_USER_POST);
     }
 
+    private List<String> processPostCommand(String userName, String userPost) {
+        PostCommand postCommand = new PostCommand(userRepository, userName, userPost);
+        return postCommand.process();
+    }
 
 
 }

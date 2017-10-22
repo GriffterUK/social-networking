@@ -22,16 +22,14 @@ public class ReadCommandShould extends WithMockedUserRepository {
 
     private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
 
-    private static String NON_EXISTENT_USER = "MrInvisible";
-    private static String SOME_USER_NAME = "Jim";
-    private static String SOME_USER_POST = "Hello World!";
+    private static final String SOME_EXISTING_USER_POST = "Ah, life is great, isn't it!?";
 
     @Test
     public void returnAnEmptyListAsResultWhenUserDoesNotExist()
     {
-        expectUserRepositoryNotToFindUserByName(NON_EXISTENT_USER);
+        expectUserRepositoryNotToFindUserByName(NON_EXISTENT_USER_NAME);
 
-        assertThat(new ReadCommand(userRepository, NON_EXISTENT_USER).process(),
+        assertThat(processReadCommand(NON_EXISTENT_USER_NAME),
                 is(EMPTY_LIST_OF_STRINGS));
     }
 
@@ -39,12 +37,19 @@ public class ReadCommandShould extends WithMockedUserRepository {
     public void returnThePostsOfAnExistingUser()
     {
         List<String> userPosts = new ArrayList<>();
-        userPosts.add(SOME_USER_POST);
+        userPosts.add(SOME_EXISTING_USER_POST);
 
-        User user = expectUserRepositoryToFindUserByName(SOME_USER_NAME);
+        User user = expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
         when(user.getPosts()).thenReturn(userPosts);
 
-        assertThat(new ReadCommand(userRepository, SOME_USER_NAME).process(),
+        assertThat(processReadCommand(SOME_EXISTING_USER_NAME),
                 is(userPosts));
     }
+
+    private List<String> processReadCommand(String userName) {
+        ReadCommand readCommand = new ReadCommand(userRepository, userName);
+        return readCommand.process();
+    }
+
+
 }
