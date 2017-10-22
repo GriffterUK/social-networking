@@ -1,15 +1,36 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by User on 21/10/2017.
  */
 public class ReadCommand implements Command {
 
+    private static List<String> NO_POSTS = new ArrayList<>();
+
+    private UserRepository userRepository;
+    private String userName;
+
+    public ReadCommand(UserRepository userRepository, String userName) {
+        this.userRepository = userRepository;
+        this.userName = userName;
+    }
+
     @Override
-    public List<String> process() {
-        return new ArrayList<>();
+    public List<String> process()
+    {
+        Optional<User> user = userRepository.findUserByName(userName);
+        return postsForOptionalUser(user);
+
+    }
+
+    public List<String> postsForOptionalUser(Optional<User> user) {
+        return user.isPresent() ? user.get().getPosts() : NO_POSTS;
     }
 }

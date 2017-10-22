@@ -15,23 +15,23 @@ public class FollowCommand implements Command {
     private UserRepository userRepository;
 
     private String userName;
-    private String followingThisUserName;
+    private String userNameOfUserToFollow;
 
-    public FollowCommand(UserRepository userRepository, String userName, String followingThisUserName)
+    public FollowCommand(UserRepository userRepository, String userName, String userNameOfUserToFollow)
     {
         this.userRepository = userRepository;
         this.userName = userName;
-        this.followingThisUserName = followingThisUserName;
+        this.userNameOfUserToFollow = userNameOfUserToFollow;
     }
 
     @Override
     public List<String> process() {
 
         Optional<User> user = userRepository.findUserByName(userName);
-        Optional<User> followingUser = userRepository.findUserByName(followingThisUserName);
+        Optional<User> userToFollow = userRepository.findUserByName(userNameOfUserToFollow);
 
-        if (bothUsersExist(user, followingUser)) {
-            user.get().addUserToFollow(followingUser.get());
+        if (bothUsersExist(user, userToFollow)) {
+            user.get().addUserToFollow(userToFollow.get());
         }
 
         return new ArrayList<>();

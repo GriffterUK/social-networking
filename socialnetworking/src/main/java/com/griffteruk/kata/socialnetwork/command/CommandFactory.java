@@ -14,22 +14,22 @@ public class CommandFactory {
         this.userRepository = userRepository;
     }
 
-    public Command createCommand(String user, String operation, String message)
+    public Command createCommand(String userName, String operation, String message)
     {
         Command command = new EmptyCommand();
 
         switch (operation)
         {
             case "->":
-                command = new PostCommand(userRepository, user, message);
+                command = new PostCommand(userRepository, userName, message);
                 break;
             case "":
-                if ( user.isEmpty() == false ) {
-                    command = new ReadCommand();
+                if ( userName.isEmpty() == false ) {
+                    command = new ReadCommand(userRepository, userName);
                 }
                 break;
             case "follows":
-                command = new FollowCommand(userRepository, user, message);
+                command = new FollowCommand(userRepository, userName, message);
                 break;
             case "wall":
                 command = new WallCommand();
