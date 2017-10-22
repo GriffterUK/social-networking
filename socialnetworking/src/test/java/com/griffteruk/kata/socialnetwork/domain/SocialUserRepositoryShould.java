@@ -26,7 +26,7 @@ public class SocialUserRepositoryShould {
     }
 
     @Test
-    public void returnUserWhenNewCreatingNewUser()
+    public void returnUserWhenCreatingNewUser()
     {
         assertThat(userRepository.createUser(NEW_USER_NAME), is(instanceOf(User.class)));
     }

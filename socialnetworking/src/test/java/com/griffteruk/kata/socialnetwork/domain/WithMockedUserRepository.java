@@ -1,6 +1,5 @@
 package com.griffteruk.kata.socialnetwork.domain;
 
-import org.junit.Before;
 import org.mockito.Mock;
 
 import java.util.Optional;

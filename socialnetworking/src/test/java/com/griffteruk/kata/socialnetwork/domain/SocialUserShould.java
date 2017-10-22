@@ -13,7 +13,6 @@ public class SocialUserShould {
 
     private static final String SOME_USER_NAME = "Jim";
     private static final String SOME_USERS_FIRST_POST = "Hello World!";
-
     private static final String USER_NAME_TO_FOLLOW = "Bob";
 
     public static final int NONE = 0;

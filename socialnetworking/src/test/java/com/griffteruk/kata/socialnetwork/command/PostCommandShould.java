@@ -23,7 +23,6 @@ public class PostCommandShould extends WithMockedUserRepository {
     private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
 
     private static final String SOME_EXISTING_USER_POST = "What a wonderful day!";
-    private static final String NEW_USER_POST = "Hello World!";
     private static final String EMPTY_POST = "";
 
     @Test
