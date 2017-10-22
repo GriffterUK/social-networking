@@ -18,6 +18,6 @@ public class FollowCommandShould {
     @Test
     public void returnAnEmptyListAsResult()
     {
-        assertThat(new FollowCommand().result(), is(EMPTY_LIST_OF_STRINGS));
+        assertThat(new FollowCommand().process(), is(EMPTY_LIST_OF_STRINGS));
     }
 }

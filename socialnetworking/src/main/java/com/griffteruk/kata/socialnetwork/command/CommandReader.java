@@ -1,15 +1,20 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class CommandReader {
 
-    CommandFactory commandFactory = new CommandFactory();   
+    private CommandFactory commandFactory;
   
-    public CommandReader()
+    public CommandReader(UserRepository userRepository)
     {
-
+        // TODO - change this the commandreader should not need to accept a UserRepo
+        //        just for the purposes of passing it on
+        //        consider making the command factory an interface (and passing it into here)
+        this.commandFactory = new CommandFactory(userRepository);
     }
 
     Command parse(String commandText)

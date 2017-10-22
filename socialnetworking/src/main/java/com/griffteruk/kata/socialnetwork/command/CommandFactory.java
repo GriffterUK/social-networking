@@ -1,9 +1,18 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+
 /**
  * Created by User on 21/10/2017.
  */
 public class CommandFactory {
+
+    private UserRepository userRepository;
+
+    public CommandFactory(UserRepository userRepository)
+    {
+        this.userRepository = userRepository;
+    }
 
     public Command createCommand(String user, String operation, String message)
     {
@@ -12,7 +21,7 @@ public class CommandFactory {
         switch (operation)
         {
             case "->":
-                command = new PostCommand(user, message);
+                command = new PostCommand(userRepository, user, message);
                 break;
             case "":
                 if ( user.isEmpty() == false ) {

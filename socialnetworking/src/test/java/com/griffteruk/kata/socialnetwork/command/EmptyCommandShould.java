@@ -18,6 +18,6 @@ public class EmptyCommandShould {
     @Test
     public void returnAnEmptyListAsResult()
     {
-        assertThat(new EmptyCommand().result(), is(EMPTY_LIST_OF_STRINGS));
+        assertThat(new EmptyCommand().process(), is(EMPTY_LIST_OF_STRINGS));
     }
 }

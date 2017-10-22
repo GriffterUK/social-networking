@@ -1,7 +1,9 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,10 +18,13 @@ public class CommandReaderShould {
 
     private CommandReader commandReader;
 
+    @Mock
+    private UserRepository userRepository;
+
     @Before
     public void initialise()
     {
-        commandReader = new CommandReader();
+        commandReader = new CommandReader(userRepository);
     }
 
     @Test

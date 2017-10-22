@@ -9,7 +9,7 @@ import java.util.List;
 public class EmptyCommand implements Command {
 
     @Override
-    public List<String> result() {
+    public List<String> process() {
         return new ArrayList<>();
     }
 }
