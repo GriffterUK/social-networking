@@ -46,4 +46,13 @@ public class SocialUserRepositoryShould {
         assertThat(foundUser.isPresent(), is(true));
         assertThat(foundUser.get(), is(newUser));
     }
+
+    @Test
+    public void notCreateDuplicateUsers()
+    {
+        User newUser = userRepository.createUser(NEW_USER_NAME);
+        User theSameUser = userRepository.createUser(NEW_USER_NAME);
+
+        assertThat(newUser, is(theSameUser));
+    }
 }

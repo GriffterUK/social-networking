@@ -13,6 +13,11 @@ public class SocialUserRepository implements UserRepository {
 
     public User createUser(String name)
     {
+        Optional<User> existingUser = findUserByName(name);
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        }
+
         User user = new SocialUser(name);
         users.add(user);
         return user;
