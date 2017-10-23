@@ -1,6 +1,5 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-
 import com.griffteruk.kata.socialnetwork.domain.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,9 +8,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.griffteruk.kata.socialnetwork.common.Lists.*;
+import static com.griffteruk.kata.socialnetwork.common.Lists.EMPTY_LIST_OF_STRINGS;
+import static com.griffteruk.kata.socialnetwork.common.Lists.stringListHasStringStartingWith;
 import static com.griffteruk.kata.socialnetwork.common.Posts.*;
-import static com.griffteruk.kata.socialnetwork.common.Users.*;
+import static com.griffteruk.kata.socialnetwork.common.Users.NON_EXISTENT_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.common.Users.SOME_EXISTING_USER_NAME;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,8 +25,8 @@ public class WallCommandShould {
     public void returnAnEmptyListAsResultWhenUserDoesNotExist()
     {
         assertThat(processWallCommandFor(
-                MockUserRepository.aMockUserRepository()
-                        .thatDoesNotFindUserName(NON_EXISTENT_USER_NAME)
+                MockUserRepositoryBuilder.aMockUserRepository()
+                        .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
                         .build(),
                 NON_EXISTENT_USER_NAME),
                 is(EMPTY_LIST_OF_STRINGS));
@@ -49,7 +50,7 @@ public class WallCommandShould {
                 .build();
 
         List<String> resultOfWallCommand = processWallCommandFor(
-                MockUserRepository.aMockUserRepository()
+                MockUserRepositoryBuilder.aMockUserRepository()
                     .thatFindsUser(user)
                     .build(),
                 SOME_EXISTING_USER_NAME);
@@ -92,7 +93,7 @@ public class WallCommandShould {
                 .build();
 
         List<String> resultOfWallCommand = processWallCommandFor(
-                MockUserRepository.aMockUserRepository()
+                MockUserRepositoryBuilder.aMockUserRepository()
                         .thatFindsUser(user)
                         .thatFindsUser(followedUser)
                         .build(),

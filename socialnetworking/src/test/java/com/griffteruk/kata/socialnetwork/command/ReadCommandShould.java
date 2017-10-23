@@ -6,13 +6,14 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.griffteruk.kata.socialnetwork.common.Lists.*;
-import static com.griffteruk.kata.socialnetwork.common.Posts.*;
-import static com.griffteruk.kata.socialnetwork.common.Users.*;
-
+import static com.griffteruk.kata.socialnetwork.common.Lists.EMPTY_LIST_OF_STRINGS;
+import static com.griffteruk.kata.socialnetwork.common.Lists.stringListHasStringStartingWith;
+import static com.griffteruk.kata.socialnetwork.common.Posts.FIRST_POST_OF_EXISTING_USER;
+import static com.griffteruk.kata.socialnetwork.common.Posts.SECOND_POST_OF_EXISTING_USER;
+import static com.griffteruk.kata.socialnetwork.common.Users.NON_EXISTENT_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.common.Users.SOME_EXISTING_USER_NAME;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -24,14 +25,12 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class ReadCommandShould  {
 
-    private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
-
     @Test
     public void returnAnEmptyListAsResultWhenUserDoesNotExist()
     {
         assertThat(processReadCommandFor(
-                MockUserRepository.aMockUserRepository()
-                        .thatDoesNotFindUserName(NON_EXISTENT_USER_NAME)
+                MockUserRepositoryBuilder.aMockUserRepository()
+                        .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
                         .build(),
                 NON_EXISTENT_USER_NAME),
                 is(EMPTY_LIST_OF_STRINGS));
@@ -55,7 +54,7 @@ public class ReadCommandShould  {
                 .build();
 
         List<String> resultOfReadCommand = processReadCommandFor(
-                MockUserRepository.aMockUserRepository()
+                MockUserRepositoryBuilder.aMockUserRepository()
                         .thatFindsUser(user)
                         .build(),
                 SOME_EXISTING_USER_NAME);

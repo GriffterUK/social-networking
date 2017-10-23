@@ -1,15 +1,17 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.domain.Post;
-import com.griffteruk.kata.socialnetwork.domain.User;
-import com.griffteruk.kata.socialnetwork.domain.WithMockedUserRepository;
+import com.griffteruk.kata.socialnetwork.domain.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.griffteruk.kata.socialnetwork.common.Lists.EMPTY_LIST_OF_STRINGS;
+import static com.griffteruk.kata.socialnetwork.common.Posts.FIRST_POST_OF_EXISTING_USER;
+import static com.griffteruk.kata.socialnetwork.common.Posts.FIRST_POST_OF_NEW_USER;
+import static com.griffteruk.kata.socialnetwork.common.Users.NEW_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.common.Users.SOME_EXISTING_USER_NAME;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
@@ -18,28 +20,39 @@ import static org.mockito.Mockito.*;
  * Created by User on 21/10/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PostCommandShould extends WithMockedUserRepository {
-
-    private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
-
-    private static final String SOME_EXISTING_USER_POST = "What a wonderful day!";
-    private static final String EMPTY_POST = "";
+public class PostCommandShould  {
 
     @Test
     public void returnAnEmptyListAsResult()
     {
-        expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
+        UserRepository userRepository =
+                MockUserRepositoryBuilder.aMockUserRepository()
+                    .thatFindsUser(
+                            MockUserBuilder.aMockUser()
+                                    .withName(SOME_EXISTING_USER_NAME)
+                                    .build()
+                    ).build();
 
-        assertThat(processPostCommand(SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_POST),
+        assertThat(
+                processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER),
                 is(EMPTY_LIST_OF_STRINGS));
     }
 
     @Test
     public void createNewUserWhenNewUserCreatesTheirFirstPost()
     {
-        expectUserRepositoryToCreateUserForName(NEW_USER_NAME);
+        UserRepository userRepository =
+                MockUserRepositoryBuilder.aMockUserRepository()
+                    .thatDoesNotFindUserWithName(NEW_USER_NAME)
+                    .thatCreatesUser(
+                            MockUserBuilder.aMockUser()
+                                    .withName(NEW_USER_NAME)
+                                    .build()
+                    ).build();
 
-        processPostCommand(NEW_USER_NAME, EMPTY_POST);
+        assertThat(
+                processPostCommand(userRepository, NEW_USER_NAME, FIRST_POST_OF_NEW_USER),
+                is(EMPTY_LIST_OF_STRINGS));
 
         verify(userRepository).createUser(NEW_USER_NAME);
     }
@@ -47,9 +60,15 @@ public class PostCommandShould extends WithMockedUserRepository {
     @Test
     public void notCreateNewUserWhenExistingUserCreatesAPost()
     {
-        expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
+        UserRepository userRepository =
+                MockUserRepositoryBuilder.aMockUserRepository()
+                        .thatFindsUser(
+                                MockUserBuilder.aMockUser()
+                                        .withName(SOME_EXISTING_USER_NAME)
+                                        .build()
+                        ).build();
 
-        processPostCommand(SOME_EXISTING_USER_NAME, EMPTY_POST);
+        processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER);
 
         verify(userRepository, never()).createUser(SOME_EXISTING_USER_NAME);
     }
@@ -57,17 +76,22 @@ public class PostCommandShould extends WithMockedUserRepository {
     @Test
     public void addPostsToUsersListOfPosts()
     {
-        User someUser = expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
+        User someUser = MockUserBuilder.aMockUser()
+                .withName(SOME_EXISTING_USER_NAME)
+                .build();
 
-        processPostCommand(SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_POST );
+        UserRepository userRepository =
+                MockUserRepositoryBuilder.aMockUserRepository()
+                        .thatFindsUser(someUser)
+                        .build();
+
+        processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER );
 
         verify(someUser).addPost(any(Post.class));
     }
 
-    private List<String> processPostCommand(String userName, String userPost) {
+    private List<String> processPostCommand(UserRepository userRepository, String userName, String userPost) {
         PostCommand postCommand = new PostCommand(userRepository, userName, userPost);
         return postCommand.process();
     }
-
-
 }
