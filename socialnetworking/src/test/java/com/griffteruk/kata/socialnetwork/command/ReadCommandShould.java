@@ -38,7 +38,7 @@ public class ReadCommandShould extends WithMockedUserRepository {
     }
 
     @Test
-    public void returnThePostsOfAnExistingUser()
+    public void returnThePostsOfTheRequestingUser()
     {
         List<Post> userPosts = new ArrayList<>();
         userPosts.add(mockedPostWithMessage(FIRST_POST_OF_EXISTING_USER));

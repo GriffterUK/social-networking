@@ -20,6 +20,12 @@ public abstract class WithMockedUserRepository {
     protected static final String NEW_USER_NAME = "Alice";
     protected static final String NON_EXISTENT_USER_NAME = "MrInvisible";
 
+    protected void expectUserRepositoryToFindThisUser(User userToFind)
+    {
+        when(userRepository.findUserByName(userToFind.getName())).
+                thenReturn(Optional.of(userToFind));
+    }
+
     protected User expectUserRepositoryToFindUserByName(String userName)
     {
         User user = mock(User.class);

@@ -32,7 +32,7 @@ public class CommandFactory {
                 command = new FollowCommand(userRepository, userName, message);
                 break;
             case "wall":
-                command = new WallCommand();
+                command = new WallCommand(userRepository, userName);
                 break;
         }
 
