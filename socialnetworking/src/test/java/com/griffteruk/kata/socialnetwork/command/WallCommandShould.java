@@ -7,23 +7,18 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.griffteruk.kata.socialnetwork.common.Lists.*;
+import static com.griffteruk.kata.socialnetwork.common.Posts.*;
+import static com.griffteruk.kata.socialnetwork.common.Users.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WallCommandShould extends WithMockedUserRepository {
-
-    private static final List<String> EMPTY_LIST_OF_STRINGS = new ArrayList<>();
-
-    private static final String FIRST_POST_OF_EXISTING_USER = "Ah, life is great, isn't it!?";
-    private static final String SECOND_POST_OF_EXISTING_USER = "Mockito, EasyMock, PowerMock, decisions decisions!";
-
-    private static final String FIRST_POST_OF_FOLLOWED_USER = "Hello World!";
-    private static final String SECOND_POST_OF_FOLLOWED_USER = "Is anybody out there?";
+public class WallCommandShould {
 
     @Test
     public void returnAnEmptyListAsResultWhenUserDoesNotExist()
@@ -59,8 +54,8 @@ public class WallCommandShould extends WithMockedUserRepository {
                     .build(),
                 SOME_EXISTING_USER_NAME);
 
-        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
-        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
     }
 
     @Test
@@ -103,21 +98,14 @@ public class WallCommandShould extends WithMockedUserRepository {
                         .build(),
                 SOME_EXISTING_USER_NAME);
 
-        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
-        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
-
-        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, FIRST_POST_OF_FOLLOWED_USER));
-        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, SECOND_POST_OF_FOLLOWED_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, FIRST_POST_OF_FOLLOWED_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, SECOND_POST_OF_FOLLOWED_USER));
     }
-
 
     private List<String> processWallCommandFor(UserRepository userRepository, String userName) {
         WallCommand wallCommand = new WallCommand(userRepository, userName);
         return wallCommand.process();
-    }
-
-    private boolean listOfStringsContainsStringThatStartsWith(List<String> listOfStrings, String stringToStartWith)
-    {
-        return listOfStrings.stream().anyMatch(item -> item.startsWith(stringToStartWith));
     }
 }
