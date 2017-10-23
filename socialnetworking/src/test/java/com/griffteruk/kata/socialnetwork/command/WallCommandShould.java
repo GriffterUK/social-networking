@@ -1,10 +1,7 @@
 package com.griffteruk.kata.socialnetwork.command;
 
 
-import com.griffteruk.kata.socialnetwork.domain.MockPostBuilder;
-import com.griffteruk.kata.socialnetwork.domain.MockUserBuilder;
-import com.griffteruk.kata.socialnetwork.domain.User;
-import com.griffteruk.kata.socialnetwork.domain.WithMockedUserRepository;
+import com.griffteruk.kata.socialnetwork.domain.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -31,9 +28,11 @@ public class WallCommandShould extends WithMockedUserRepository {
     @Test
     public void returnAnEmptyListAsResultWhenUserDoesNotExist()
     {
-        expectUserRepositoryNotToFindUserByName(NON_EXISTENT_USER_NAME);
-
-        assertThat(processWallCommandFor(NON_EXISTENT_USER_NAME),
+        assertThat(processWallCommandFor(
+                MockUserRepository.aMockUserRepository()
+                        .thatDoesNotFindUserName(NON_EXISTENT_USER_NAME)
+                        .build(),
+                NON_EXISTENT_USER_NAME),
                 is(EMPTY_LIST_OF_STRINGS));
     }
 
@@ -54,9 +53,11 @@ public class WallCommandShould extends WithMockedUserRepository {
                 )
                 .build();
 
-        expectUserRepositoryToFindThisUser(user);
-
-        List<String> resultOfWallCommand = processWallCommandFor(SOME_EXISTING_USER_NAME);
+        List<String> resultOfWallCommand = processWallCommandFor(
+                MockUserRepository.aMockUserRepository()
+                    .thatFindsUser(user)
+                    .build(),
+                SOME_EXISTING_USER_NAME);
 
         assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
         assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
@@ -95,17 +96,22 @@ public class WallCommandShould extends WithMockedUserRepository {
                 )
                 .build();
 
-        expectUserRepositoryToFindThisUser(user);
-        expectUserRepositoryToFindThisUser(followedUser);
-
-        List<String> resultOfWallCommand = processWallCommandFor(SOME_EXISTING_USER_NAME);
+        List<String> resultOfWallCommand = processWallCommandFor(
+                MockUserRepository.aMockUserRepository()
+                        .thatFindsUser(user)
+                        .thatFindsUser(followedUser)
+                        .build(),
+                SOME_EXISTING_USER_NAME);
 
         assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
         assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
+
+        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, FIRST_POST_OF_FOLLOWED_USER));
+        assertTrue(listOfStringsContainsStringThatStartsWith(resultOfWallCommand, SECOND_POST_OF_FOLLOWED_USER));
     }
 
 
-    private List<String> processWallCommandFor(String userName) {
+    private List<String> processWallCommandFor(UserRepository userRepository, String userName) {
         WallCommand wallCommand = new WallCommand(userRepository, userName);
         return wallCommand.process();
     }
