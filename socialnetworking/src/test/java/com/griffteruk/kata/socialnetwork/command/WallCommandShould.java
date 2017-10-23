@@ -1,7 +1,8 @@
 package com.griffteruk.kata.socialnetwork.command;
 
 
-import com.griffteruk.kata.socialnetwork.domain.Post;
+import com.griffteruk.kata.socialnetwork.domain.MockPostBuilder;
+import com.griffteruk.kata.socialnetwork.domain.MockUserBuilder;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.domain.WithMockedUserRepository;
 import org.junit.Test;
@@ -15,8 +16,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WallCommandShould extends WithMockedUserRepository {
@@ -41,13 +40,21 @@ public class WallCommandShould extends WithMockedUserRepository {
     @Test
     public void returnThePostsOfTheRequestingUser()
     {
-        List<Post> userPosts = new ArrayList<>();
-        userPosts.add(mockedPostWithMessage(FIRST_POST_OF_EXISTING_USER));
-        userPosts.add(mockedPostWithMessage(SECOND_POST_OF_EXISTING_USER));
+        User user = MockUserBuilder.aMockUser()
+                .withName(SOME_EXISTING_USER_NAME)
+                .withPosts(
+                        MockPostBuilder.aMockPost()
+                                .withMessage(FIRST_POST_OF_EXISTING_USER)
+                                .withTimestamp(LocalDateTime.now())
+                                .build(),
+                        MockPostBuilder.aMockPost()
+                                .withMessage(SECOND_POST_OF_EXISTING_USER)
+                                .withTimestamp(LocalDateTime.now())
+                                .build()
+                )
+                .build();
 
-        User user = expectUserRepositoryToFindUserByName(SOME_EXISTING_USER_NAME);
-        when(user.getPosts()).thenReturn(userPosts);
-        when(user.getFollowedUsers()).thenReturn(new ArrayList<User>());
+        expectUserRepositoryToFindThisUser(user);
 
         List<String> resultOfWallCommand = processWallCommandFor(SOME_EXISTING_USER_NAME);
 
@@ -58,25 +65,35 @@ public class WallCommandShould extends WithMockedUserRepository {
     @Test
     public void returnThePostsOfTheRequestingUserAndUsersTheyFollow()
     {
-        List<Post> userPosts = new ArrayList<>();
-        userPosts.add(mockedPostWithMessage(FIRST_POST_OF_EXISTING_USER));
-        userPosts.add(mockedPostWithMessage(SECOND_POST_OF_EXISTING_USER));
+        User followedUser = MockUserBuilder.aMockUser()
+                .withName("Alice")
+                .withPosts(
+                        MockPostBuilder.aMockPost()
+                                .withMessage(FIRST_POST_OF_FOLLOWED_USER)
+                                .withTimestamp(LocalDateTime.now())
+                                .build(),
+                        MockPostBuilder.aMockPost()
+                                .withMessage(SECOND_POST_OF_FOLLOWED_USER)
+                                .withTimestamp(LocalDateTime.now())
+                                .build()
+                )
+                .build();
 
-        List<Post> followedUserPosts = new ArrayList<>();
-        followedUserPosts.add(mockedPostWithMessage(FIRST_POST_OF_FOLLOWED_USER));
-        followedUserPosts.add(mockedPostWithMessage(SECOND_POST_OF_FOLLOWED_USER));
 
-        User followedUser = mock(User.class);
-        when(followedUser.getName()).thenReturn("Alice");
-        when(followedUser.getPosts()).thenReturn(followedUserPosts);
-
-        List<User> followedUsers = new ArrayList<>();
-        followedUsers.add(followedUser);
-
-        User user = mock(User.class);
-        when(user.getName()).thenReturn(SOME_EXISTING_USER_NAME);
-        when(user.getPosts()).thenReturn(userPosts);
-        when(user.getFollowedUsers()).thenReturn(followedUsers);
+        User user = MockUserBuilder.aMockUser()
+                .withName(SOME_EXISTING_USER_NAME)
+                .followingUser(followedUser)
+                .withPosts(
+                        MockPostBuilder.aMockPost()
+                                .withMessage(FIRST_POST_OF_EXISTING_USER)
+                                .withTimestamp(LocalDateTime.now())
+                                .build(),
+                        MockPostBuilder.aMockPost()
+                                .withMessage(SECOND_POST_OF_EXISTING_USER)
+                                .withTimestamp(LocalDateTime.now())
+                                .build()
+                )
+                .build();
 
         expectUserRepositoryToFindThisUser(user);
         expectUserRepositoryToFindThisUser(followedUser);
@@ -97,13 +114,4 @@ public class WallCommandShould extends WithMockedUserRepository {
     {
         return listOfStrings.stream().anyMatch(item -> item.startsWith(stringToStartWith));
     }
-
-    private Post mockedPostWithMessage(String message)
-    {
-        Post post = mock(Post.class);
-        when(post.getMessage()).thenReturn(message);
-        when(post.getTimestamp()).thenReturn(LocalDateTime.now());
-        return post;
-    }
-
 }
