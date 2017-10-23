@@ -1,5 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.SocialPost;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.domain.UserRepository;
 
@@ -28,7 +29,7 @@ public class PostCommand implements Command {
         createUserIfNotExists(userName);
 
         User user = userRepository.findUserByName(userName).get();
-        user.addPost(this.message);
+        user.addPost(new SocialPost(this.message));
 
         return new ArrayList<>();
     }

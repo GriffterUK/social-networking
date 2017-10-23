@@ -9,8 +9,8 @@ public interface User {
 
     String getName();
 
-    void addPost(String message);
-    List<String> getPosts();
+    void addPost(Post post);
+    List<Post> getPosts();
 
     void addUserToFollow(User user);
     List<User> getFollowedUsers();

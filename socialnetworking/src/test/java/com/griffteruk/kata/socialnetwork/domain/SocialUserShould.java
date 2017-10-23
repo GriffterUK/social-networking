@@ -40,10 +40,10 @@ public class SocialUserShould {
     @Test
     public void returnAllPostsThatWereAdded()
     {
-        someUser.addPost(SOME_USERS_FIRST_POST);
+        someUser.addPost(new SocialPost(SOME_USERS_FIRST_POST));
 
         assertThat(numberOfPostsForUser(someUser), is(1));
-        assertThat(firstPostForUser(someUser), is(SOME_USERS_FIRST_POST));
+        assertThat(firstPostMessageForUser(someUser), is(SOME_USERS_FIRST_POST));
     }
 
     @Test
@@ -74,9 +74,9 @@ public class SocialUserShould {
         return user.getPosts().size();
     }
 
-    protected String firstPostForUser(User user)
+    protected String firstPostMessageForUser(User user)
     {
-        return user.getPosts().size() > 0 ? user.getPosts().get(0) : "";
+        return user.getPosts().size() > 0 ? user.getPosts().get(0).getMessage() : "";
     }
 
     protected int numberOfFollowedUsersForUser(User user)

@@ -11,7 +11,7 @@ import java.util.List;
 public class SocialUser implements User {
 
     private String name;
-    private List<String> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
     private List<User> followedUsers = new ArrayList<>();
 
     public SocialUser(String name)
@@ -25,13 +25,13 @@ public class SocialUser implements User {
     }
 
     @Override
-    public void addPost(String message)
+    public void addPost(Post post)
     {
-        this.posts.add(message);
+        this.posts.add(post);
     }
 
     @Override
-    public List<String> getPosts()
+    public List<Post> getPosts()
     {
         return Collections.unmodifiableList(posts);
     }

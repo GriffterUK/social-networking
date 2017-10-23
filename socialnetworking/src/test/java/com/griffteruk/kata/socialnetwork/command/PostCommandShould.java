@@ -1,14 +1,14 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.Post;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.domain.WithMockedUserRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,7 +61,7 @@ public class PostCommandShould extends WithMockedUserRepository {
 
         processPostCommand(SOME_EXISTING_USER_NAME, SOME_EXISTING_USER_POST );
 
-        verify(someUser).addPost(SOME_EXISTING_USER_POST);
+        verify(someUser).addPost(any(Post.class));
     }
 
     private List<String> processPostCommand(String userName, String userPost) {

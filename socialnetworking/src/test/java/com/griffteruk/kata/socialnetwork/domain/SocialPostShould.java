@@ -2,14 +2,9 @@ package com.griffteruk.kata.socialnetwork.domain;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.cglib.core.Local;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -17,6 +12,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by User on 22/10/2017.
@@ -143,6 +140,7 @@ public class SocialPostShould {
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
         assertThat(newPost.getMessage().contains("5 seconds ago"), is(true));
+
     }
 
     protected Instant whenClockIsFixed()
