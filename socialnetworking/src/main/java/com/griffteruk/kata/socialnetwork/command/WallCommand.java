@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -34,11 +35,6 @@ public class WallCommand implements Command {
         public Post getPost() {
             return post;
         }
-
-        public LocalDateTime getPostTimestamp()
-        {
-            return post.getTimestamp();
-        }
     }
 
     private UserRepository userRepository;
@@ -62,7 +58,7 @@ public class WallCommand implements Command {
                             userPostsForUser(user),
                             postsFromUsersFollowedBy(user));
 
-            return postMessagesOrderedByTimeDescending(userPostsInterestedIn);
+            return postMessagesInReverseChronologicalOrder(userPostsInterestedIn);
         }
 
         return new ArrayList<>();
@@ -98,10 +94,13 @@ public class WallCommand implements Command {
         return userPosts;
     }
 
-    private List<String> postMessagesOrderedByTimeDescending(List<UserPost> posts)
+    private List<String> postMessagesInReverseChronologicalOrder(List<UserPost> posts)
     {
         return posts.stream()
-                .sorted(Comparator.comparing(UserPost::getPostTimestamp).reversed())
+                .sorted(Comparator.comparing(
+                        (Function<UserPost, LocalDateTime>)
+                                x -> x.getPost().getTimestamp() )
+                        .reversed())
                 .map(userPost -> new String(userPost.user.getName() + " : " + userPost.post.getMessage()))
                 .collect(Collectors.toList());
     }

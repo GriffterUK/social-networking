@@ -5,6 +5,7 @@ import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,20 +31,21 @@ public class ReadCommand implements Command {
         Optional<User> user = userRepository.findUserByName(userName);
 
         return user.isPresent() ?
-                postsForUser(user.get()) : NO_POSTS;
+                postMessagesForUser(user.get()) : NO_POSTS;
     }
 
-    public List<String> postsForUser(User user) {
+    public List<String> postMessagesForUser(User user) {
 
-        List<String> userPostMessages = new ArrayList<>();
-        List<Post> userPosts = user.getPosts();
+        return postMessagesInReverseChronologicalOrder(
+                user.getPosts());
+    }
 
-        for (Post userPost : userPosts) {
-            userPostMessages.add(userPost.getMessage());
-        }
-
-        return userPosts.stream()
+    protected List<String> postMessagesInReverseChronologicalOrder(List<Post> posts )
+    {
+        return posts.stream()
+                .sorted(Comparator.comparing(Post::getTimestamp).reversed())
                 .map(post -> new String(post.getMessage()))
                 .collect(Collectors.toList());
+
     }
 }

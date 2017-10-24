@@ -27,8 +27,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class ReadCommandShould  {
 
+    private static final LocalDateTime NOW = LocalDateTime.now();
+    private static final LocalDateTime ONE_SECOND_LATER = NOW.minusSeconds(-1);
+
     @Test
-    public void returnAnEmptyListAsResultWhenUserDoesNotExist()
+    public void returnEmptyListForNonExistingUser()
     {
         assertThat(processReadCommandFor(
                 MockUserRepositoryBuilder.aMockUserRepository()
@@ -39,7 +42,7 @@ public class ReadCommandShould  {
     }
 
     @Test
-    public void returnThePostsOfTheRequestingUser()
+    public void returnTheUsersPostsAsMessages()
     {
         User user = MockUserBuilder.aMockUser()
                 .withName(SOME_EXISTING_USER_NAME)
@@ -61,8 +64,38 @@ public class ReadCommandShould  {
                         .build(),
                 SOME_EXISTING_USER_NAME);
 
+        assertThat(resultOfReadCommand.size(), is(2));
         assertTrue(stringListHasStringStartingWith(resultOfReadCommand, FIRST_POST_OF_EXISTING_USER));
         assertTrue(stringListHasStringStartingWith(resultOfReadCommand, SECOND_POST_OF_EXISTING_USER));
+    }
+
+    @Test
+    public void returnTheUsersPostsInReverseChronologicalOrder()
+    {
+        User user = MockUserBuilder.aMockUser()
+                .withName(SOME_EXISTING_USER_NAME)
+                .withPosts(
+                        MockPostBuilder.aMockPost()
+                                .withMessage(SECOND_POST_OF_EXISTING_USER)
+                                .withTimestamp(ONE_SECOND_LATER)
+                                .build(),
+                        MockPostBuilder.aMockPost()
+                                .withMessage(FIRST_POST_OF_EXISTING_USER)
+                                .withTimestamp(NOW)
+                                .build()
+
+                )
+                .build();
+
+        List<String> resultOfReadCommand = processReadCommandFor(
+                MockUserRepositoryBuilder.aMockUserRepository()
+                        .thatFindsUser(user)
+                        .build(),
+                SOME_EXISTING_USER_NAME);
+
+        assertThat(resultOfReadCommand.size(), is(2));
+        assertTrue(resultOfReadCommand.get(0).startsWith(SECOND_POST_OF_EXISTING_USER));
+        assertTrue(resultOfReadCommand.get(1).startsWith(FIRST_POST_OF_EXISTING_USER));
     }
 
     private List<String> processReadCommandFor(UserRepository userRepository, String userName) {
