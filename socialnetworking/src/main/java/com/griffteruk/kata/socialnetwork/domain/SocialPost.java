@@ -33,17 +33,17 @@ public class SocialPost implements Post {
 
         long daysSincePost = ChronoUnit.DAYS.between(LocalDateTime.now(clock), timestamp);
         if ( daysSincePost >= 1) {
-            return messageWithUnits(daysSincePost, DAY_UNIT_NAME);
+            return messageWithUnitsPostfix(daysSincePost, DAY_UNIT_NAME);
         }
 
         long minutesSincePost = ChronoUnit.MINUTES.between(LocalDateTime.now(clock), timestamp);
         if ( minutesSincePost >= 1) {
-            return messageWithUnits(minutesSincePost, MINUTE_UNIT_NAME);
+            return messageWithUnitsPostfix(minutesSincePost, MINUTE_UNIT_NAME);
         }
 
         long secondsSincePost = ChronoUnit.SECONDS.between(LocalDateTime.now(clock), timestamp);
         if (secondsSincePost >= 1) {
-            return messageWithUnits(secondsSincePost, SECOND_UNIT_NAME);
+            return messageWithUnitsPostfix(secondsSincePost, SECOND_UNIT_NAME);
         }
 
         return message;
@@ -53,9 +53,9 @@ public class SocialPost implements Post {
         return timestamp;
     }
 
-    protected String messageWithUnits(long units, String unitName)
+    protected String messageWithUnitsPostfix(long units, String unitName)
     {
         return String.format("%s (%d %s ago)", message, units,
-                units > 1 ? unitName + "s": unitName);
+                units > 1 ? unitName + "s" : unitName);
     }
 }

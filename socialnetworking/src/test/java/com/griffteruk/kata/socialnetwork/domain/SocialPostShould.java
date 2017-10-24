@@ -1,19 +1,15 @@
 package com.griffteruk.kata.socialnetwork.domain;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.time.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by User on 22/10/2017.
@@ -23,31 +19,34 @@ public class SocialPostShould {
 
     private static final String SOME_POST_MESSAGE = "This is a message";
 
-    private Post somePost;
+    private static final int ONE_DAY = 1;
+    private static final int TWO_DAYS = 2 * ONE_DAY;
 
-    @Mock
-    private Clock clock;
+    private static final int ONE_MINUTE = 1;
+    private static final int FIVE_MINUTES = 5 * ONE_MINUTE;
 
-    @Before
-    public void initialise()
-    {
-        somePost = new SocialPost(SOME_POST_MESSAGE);
-    }
+    private static final int ONE_SECOND = 1;
+    private static final int TWELVE_SECONDS = 12 * ONE_SECOND;
+
+    private static final LocalDateTime DATE_TIME_OF_POST_CREATION = LocalDateTime.now();
 
     @Test
     public void returnSameMessageAsTheOneProvided()
     {
+        Post somePost = new SocialPost(SOME_POST_MESSAGE);
         assertThat(somePost.getMessage(), is(SOME_POST_MESSAGE));
     }
 
     @Test
     public void returnTimestampOfWhenPostWasFirstCreated()
     {
-        Instant fixedInstant = whenClockIsFixed();
+        Clock clock = MockClockBuilder.aMockClock()
+                .withFixedDateTimeOf(DATE_TIME_OF_POST_CREATION)
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
-        assertThat(newPost.getTimestamp().toInstant(ZoneOffset.UTC), is(fixedInstant));
+        assertThat(newPost.getTimestamp(), is(DATE_TIME_OF_POST_CREATION));
 
         verify(clock).instant();
     }
@@ -55,12 +54,11 @@ public class SocialPostShould {
     @Test
     public void returnMessageWithDayPostfixWhenPostWasCreatedExactlyOneDayAgo()
     {
-        LocalDateTime timeWhenPostWasCreated = LocalDateTime.now();
-        LocalDateTime oneDaySincePostWasCreated = timeWhenPostWasCreated.minusDays(1);
-
-        whenClockReportsInOrderWith(
-                timeWhenPostWasCreated,
-                oneDaySincePostWasCreated);
+        Clock clock = MockClockBuilder.aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        daysSince(DATE_TIME_OF_POST_CREATION, ONE_DAY))
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
@@ -70,27 +68,25 @@ public class SocialPostShould {
     @Test
     public void returnMessageWithDaysPostfixWhenPostWasCreatedMoreThanOneDayAgo()
     {
-        LocalDateTime timeWhenPostWasCreated = LocalDateTime.now();
-        LocalDateTime fiveDaysSincePostWasCreated = timeWhenPostWasCreated.minusDays(5);
-
-        whenClockReportsInOrderWith(
-                timeWhenPostWasCreated,
-                fiveDaysSincePostWasCreated);
+        Clock clock = MockClockBuilder.aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        daysSince(DATE_TIME_OF_POST_CREATION, TWO_DAYS))
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
-        assertThat(newPost.getMessage().contains("5 days ago"), is(true));
+        assertThat(newPost.getMessage().contains("2 days ago"), is(true));
     }
 
     @Test
     public void returnMessageWithMinutePostfixWhenPostWasCreatedExactlyOneMinuteAgo()
     {
-        LocalDateTime timeWhenPostWasCreated = LocalDateTime.now();
-        LocalDateTime oneMinuteSincePostWasCreated = timeWhenPostWasCreated.minusMinutes(1);
-
-        whenClockReportsInOrderWith(
-                timeWhenPostWasCreated,
-                oneMinuteSincePostWasCreated);
+        Clock clock = MockClockBuilder.aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        minutesSince(DATE_TIME_OF_POST_CREATION, ONE_MINUTE))
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
@@ -100,12 +96,11 @@ public class SocialPostShould {
     @Test
     public void returnMessageWithMinutesPostfixWhenPostWasCreatedMoreThanOneMinuteAgo()
     {
-        LocalDateTime timeWhenPostWasCreated = LocalDateTime.now();
-        LocalDateTime fiveMinuteSincePostWasCreated = timeWhenPostWasCreated.minusMinutes(5);
-
-        whenClockReportsInOrderWith(
-                timeWhenPostWasCreated,
-                fiveMinuteSincePostWasCreated);
+        Clock clock = MockClockBuilder.aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        minutesSince(DATE_TIME_OF_POST_CREATION, FIVE_MINUTES))
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
@@ -115,12 +110,11 @@ public class SocialPostShould {
     @Test
     public void returnMessageWitSecondPostfixWhenPostWasCreatedExactlyOneSecondAgo()
     {
-        LocalDateTime timeWhenPostWasCreated = LocalDateTime.now();
-        LocalDateTime oneSecondSincePostWasCreated = timeWhenPostWasCreated.minusSeconds(1);
-
-        whenClockReportsInOrderWith(
-                timeWhenPostWasCreated,
-                oneSecondSincePostWasCreated);
+        Clock clock = MockClockBuilder.aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        secondsSince(DATE_TIME_OF_POST_CREATION, ONE_SECOND))
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
@@ -130,39 +124,29 @@ public class SocialPostShould {
     @Test
     public void returnMessageWithSecondsPostfixWhenPostWasCreatedMoreThanOneSecondAgo()
     {
-        LocalDateTime timeWhenPostWasCreated = LocalDateTime.now();
-        LocalDateTime fiveSecondsSincePostWasCreated = timeWhenPostWasCreated.minusSeconds(5);
-
-        whenClockReportsInOrderWith(
-                timeWhenPostWasCreated,
-                fiveSecondsSincePostWasCreated);
+        Clock clock = MockClockBuilder.aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        secondsSince(DATE_TIME_OF_POST_CREATION, TWELVE_SECONDS))
+                .build();
 
         Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
 
-        assertThat(newPost.getMessage().contains("5 seconds ago"), is(true));
-
+        assertThat(newPost.getMessage().contains("12 seconds ago"), is(true));
     }
 
-    protected Instant whenClockIsFixed()
+    protected LocalDateTime daysSince(LocalDateTime localDateTime, int numberOfDays)
     {
-        LocalDateTime dateTimeNow = LocalDateTime.now();
-        return whenClockReportsInOrderWith(dateTimeNow).get(0);
+        return localDateTime.minusDays(numberOfDays);
     }
 
-    protected List<Instant> whenClockReportsInOrderWith(LocalDateTime... dateTimes)
+    protected LocalDateTime minutesSince(LocalDateTime localDateTime, int numberOfMinutes)
     {
-        org.mockito.stubbing.OngoingStubbing clockStubbing = when(clock.instant());
+        return localDateTime.minusMinutes(numberOfMinutes);
+    }
 
-        List<Instant> clockInstants = new ArrayList<>();
-        for (LocalDateTime dateTime : dateTimes) {
-            Instant dateTimeInstant = dateTime.atOffset(ZoneOffset.UTC).toInstant();
-            clockInstants.add(dateTimeInstant);
-
-            clockStubbing = clockStubbing.thenReturn(dateTimeInstant);
-        }
-
-        when(clock.getZone()).thenReturn(ZoneId.of("UTC").normalized());
-
-        return clockInstants;
+    protected LocalDateTime secondsSince(LocalDateTime localDateTime, int numberOfSeconds)
+    {
+        return localDateTime.minusSeconds(numberOfSeconds);
     }
 }
