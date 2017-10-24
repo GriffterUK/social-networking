@@ -1,8 +1,8 @@
 package com.griffteruk.kata.socialnetwork.io;
 
 import com.griffteruk.kata.socialnetwork.SocialConsole;
+import com.griffteruk.kata.socialnetwork.command.Command;
 import com.griffteruk.kata.socialnetwork.command.CommandReader;
-import com.griffteruk.kata.socialnetwork.command.EchoCommand;
 import com.griffteruk.kata.socialnetwork.command.EmptyCommand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -36,6 +37,24 @@ public class SocialConsoleShould {
 
     @InjectMocks
     private SocialConsole socialConsole;
+
+
+    class EchoCommand implements Command {
+
+        private List<String> listOfStringsToEcho;
+
+        public EchoCommand(List<String> listOfStringsToEcho)
+        {
+            this.listOfStringsToEcho = listOfStringsToEcho;
+        }
+
+        @Override
+        public List<String> process() {
+            return listOfStringsToEcho;
+        }
+    }
+
+
 
     @Test
     public void executeUntilEmptyTextLineIsRead()
