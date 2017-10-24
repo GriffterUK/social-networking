@@ -31,7 +31,7 @@ public class SocialPost implements Post {
 
     public String getMessage() {
 
-        LocalDateTime dateTimeNow = LocalDateTime.now();
+        LocalDateTime dateTimeNow = LocalDateTime.now(clock);
 
         long daysSincePost = ChronoUnit.DAYS.between(timestamp, dateTimeNow);
         if ( daysSincePost >= 1) {

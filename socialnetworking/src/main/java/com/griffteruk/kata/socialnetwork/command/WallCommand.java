@@ -101,7 +101,7 @@ public class WallCommand implements Command {
     private List<String> postMessagesOrderedByTimeDescending(List<UserPost> posts)
     {
         return posts.stream()
-                .sorted(Comparator.comparing(UserPost::getPostTimestamp))
+                .sorted(Comparator.comparing(UserPost::getPostTimestamp).reversed())
                 .map(userPost -> new String(userPost.user.getName() + " : " + userPost.post.getMessage()))
                 .collect(Collectors.toList());
     }

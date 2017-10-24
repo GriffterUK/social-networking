@@ -13,6 +13,7 @@ import java.util.List;
 import static com.griffteruk.kata.socialnetwork.common.Lists.EMPTY_LIST_OF_STRINGS;
 import static com.griffteruk.kata.socialnetwork.common.Lists.stringListHasStringStartingWith;
 import static com.griffteruk.kata.socialnetwork.common.Posts.*;
+import static com.griffteruk.kata.socialnetwork.common.Users.FOLLOWED_USER_NAME;
 import static com.griffteruk.kata.socialnetwork.common.Users.NON_EXISTENT_USER_NAME;
 import static com.griffteruk.kata.socialnetwork.common.Users.SOME_EXISTING_USER_NAME;
 
@@ -57,15 +58,18 @@ public class WallCommandShould {
                     .build(),
                 SOME_EXISTING_USER_NAME);
 
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
+                SOME_EXISTING_USER_NAME + " : " + FIRST_POST_OF_EXISTING_USER));
+
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
+                SOME_EXISTING_USER_NAME + " : " + SECOND_POST_OF_EXISTING_USER));
     }
 
     @Test
     public void returnThePostsOfTheRequestingUserAndUsersTheyFollow()
     {
         User followedUser = MockUserBuilder.aMockUser()
-                .withName("Alice")
+                .withName(FOLLOWED_USER_NAME)
                 .withPosts(
                         MockPostBuilder.aMockPost()
                                 .withMessage(FIRST_POST_OF_FOLLOWED_USER)
@@ -101,10 +105,16 @@ public class WallCommandShould {
                         .build(),
                 SOME_EXISTING_USER_NAME);
 
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, FIRST_POST_OF_EXISTING_USER));
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, SECOND_POST_OF_EXISTING_USER));
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, FIRST_POST_OF_FOLLOWED_USER));
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand, SECOND_POST_OF_FOLLOWED_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
+                SOME_EXISTING_USER_NAME + " : " + FIRST_POST_OF_EXISTING_USER));
+
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
+                SOME_EXISTING_USER_NAME + " : " + SECOND_POST_OF_EXISTING_USER));
+
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
+                FOLLOWED_USER_NAME + " : " + FIRST_POST_OF_FOLLOWED_USER));
+        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
+                FOLLOWED_USER_NAME + " : " + SECOND_POST_OF_FOLLOWED_USER));
     }
 
     private List<String> processWallCommandFor(UserRepository userRepository, String userName) {

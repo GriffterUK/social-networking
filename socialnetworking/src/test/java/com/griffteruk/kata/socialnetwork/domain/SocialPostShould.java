@@ -137,16 +137,16 @@ public class SocialPostShould {
 
     protected LocalDateTime daysSince(LocalDateTime localDateTime, int numberOfDays)
     {
-        return localDateTime.minusDays(numberOfDays);
+        return localDateTime.minusDays(numberOfDays * -1);
     }
 
     protected LocalDateTime minutesSince(LocalDateTime localDateTime, int numberOfMinutes)
     {
-        return localDateTime.minusMinutes(numberOfMinutes);
+        return localDateTime.minusMinutes(numberOfMinutes * -1);
     }
 
     protected LocalDateTime secondsSince(LocalDateTime localDateTime, int numberOfSeconds)
     {
-        return localDateTime.minusSeconds(numberOfSeconds);
+        return localDateTime.minusSeconds(numberOfSeconds * -1);
     }
 }
