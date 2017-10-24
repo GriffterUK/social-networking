@@ -1,5 +1,7 @@
-package com.griffteruk.kata.socialnetwork.domain;
+package com.griffteruk.kata.socialnetwork.repositories;
 
+import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
 import org.junit.Before;
 import org.junit.Test;
 

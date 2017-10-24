@@ -1,4 +1,7 @@
-package com.griffteruk.kata.socialnetwork.domain;
+package com.griffteruk.kata.socialnetwork.repositories;
+
+import com.griffteruk.kata.socialnetwork.domain.SocialUser;
+import com.griffteruk.kata.socialnetwork.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;

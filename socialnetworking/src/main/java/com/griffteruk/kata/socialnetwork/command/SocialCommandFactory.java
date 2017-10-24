@@ -1,6 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 /**
  * Created by User on 21/10/2017.

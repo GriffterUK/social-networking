@@ -1,6 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
