@@ -21,11 +21,13 @@ public class CommandReader {
     {
         List<String> commandArguments = Arrays.asList(commandText.split(" "));
 
-        String user = commandArguments.size() >= 1 ? commandArguments.get(0) : "";
-        String operation = commandArguments.size() >= 2 ? commandArguments.get(1) : "";
+        String user =  elementOrDefault(commandArguments, 0, "");
+        String operation = elementOrDefault(commandArguments, 1, "");
 
         String message = commandArguments.size() >= 3 ?
-                joinListOfStringsWithSpaces(subsetOfListStartingFrom(commandArguments, 2)) : "";
+                joinListOfStringsWithSpaces(
+                        subsetOfListStartingFrom(commandArguments, 2))
+                : "";
 
         return commandFactory.createCommand(user, operation, message);
     }
@@ -36,5 +38,10 @@ public class CommandReader {
 
     private String joinListOfStringsWithSpaces(List<String> commandArguments) {
         return String.join(" ", commandArguments);
+    }
+
+    private String elementOrDefault(List<String> elementList, int index, String defaultIfNotExists)
+    {
+        return ( elementList.size() > index ) ? elementList.get(index) : defaultIfNotExists;
     }
 }
