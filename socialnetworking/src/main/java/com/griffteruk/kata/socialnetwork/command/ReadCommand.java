@@ -28,23 +28,22 @@ public class ReadCommand implements Command {
     public List<String> process()
     {
         Optional<User> user = userRepository.findUserByName(userName);
-        return postsForOptionalUser(user);
+
+        return user.isPresent() ?
+                postsForUser(user.get()) : NO_POSTS;
     }
 
-    public List<String> postsForOptionalUser(Optional<User> user) {
-        if (user.isPresent() == true ) {
-            List<String> userPostMessages = new ArrayList<>();
-            List<Post> userPosts = user.get().getPosts();
-            for (Post userPost : userPosts) {
-                userPostMessages.add(userPost.getMessage());
-            }
+    public List<String> postsForUser(User user) {
 
-            return userPosts.stream()
-                    .map(post -> new String(post.getMessage()))
-                    .collect(Collectors.toList());
+        List<String> userPostMessages = new ArrayList<>();
+        List<Post> userPosts = user.getPosts();
 
-            //return userPostMessages;
+        for (Post userPost : userPosts) {
+            userPostMessages.add(userPost.getMessage());
         }
-        return NO_POSTS;
+
+        return userPosts.stream()
+                .map(post -> new String(post.getMessage()))
+                .collect(Collectors.toList());
     }
 }

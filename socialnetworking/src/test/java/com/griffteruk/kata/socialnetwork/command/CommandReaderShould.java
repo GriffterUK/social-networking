@@ -1,6 +1,7 @@
 package com.griffteruk.kata.socialnetwork.command;
 
 import com.griffteruk.kata.socialnetwork.domain.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -23,7 +24,15 @@ public class CommandReaderShould {
     private UserRepository userRepository;
 
     @InjectMocks
+    private SocialCommandFactory commandFactory;
+
     private CommandReader commandReader;
+
+    @Before
+    public void initialise()
+    {
+        commandReader = new CommandReader(commandFactory);
+    }
 
     @Test
     public void returnEmptyCommandWhenRequestIsEmpty()
