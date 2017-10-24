@@ -31,17 +31,19 @@ public class SocialPost implements Post {
 
     public String getMessage() {
 
-        long daysSincePost = ChronoUnit.DAYS.between(LocalDateTime.now(clock), timestamp);
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+
+        long daysSincePost = ChronoUnit.DAYS.between(timestamp, dateTimeNow);
         if ( daysSincePost >= 1) {
             return messageWithUnitsPostfix(daysSincePost, DAY_UNIT_NAME);
         }
 
-        long minutesSincePost = ChronoUnit.MINUTES.between(LocalDateTime.now(clock), timestamp);
+        long minutesSincePost = ChronoUnit.MINUTES.between(timestamp, dateTimeNow);
         if ( minutesSincePost >= 1) {
             return messageWithUnitsPostfix(minutesSincePost, MINUTE_UNIT_NAME);
         }
 
-        long secondsSincePost = ChronoUnit.SECONDS.between(LocalDateTime.now(clock), timestamp);
+        long secondsSincePost = ChronoUnit.SECONDS.between(timestamp, dateTimeNow);
         if (secondsSincePost >= 1) {
             return messageWithUnitsPostfix(secondsSincePost, SECOND_UNIT_NAME);
         }
