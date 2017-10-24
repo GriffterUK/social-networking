@@ -5,6 +5,9 @@ import org.junit.Test;
 
 import java.util.Optional;
 
+import static com.griffteruk.kata.socialnetwork.common.Users.ANOTHER_NEW_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.common.Users.NEW_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.common.Users.NON_EXISTENT_USER_NAME;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -13,9 +16,6 @@ import static org.hamcrest.CoreMatchers.is;
  * Created by User on 22/10/2017.
  */
 public class SocialUserRepositoryShould {
-
-    private static final String NEW_USER_NAME = "Jim";
-    private static final String NON_EXISTENT_USER_NAME = "MrInvisible";
 
     private SocialUserRepository userRepository;
 
@@ -45,6 +45,18 @@ public class SocialUserRepositoryShould {
 
         assertThat(foundUser.isPresent(), is(true));
         assertThat(foundUser.get(), is(newUser));
+    }
+
+    @Test
+    public void findUserAmongMultipleExistingUsers()
+    {
+        userRepository.createUser(NEW_USER_NAME);
+        User userToFind = userRepository.createUser(ANOTHER_NEW_USER_NAME);
+
+        Optional<User> foundUser = userRepository.findUserByName(ANOTHER_NEW_USER_NAME);
+
+        assertThat(foundUser.isPresent(), is(true));
+        assertThat(foundUser.get(), is(userToFind));
     }
 
     @Test
