@@ -1,19 +1,15 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
-
 import java.util.Arrays;
 import java.util.List;
 
-public class SocialCommandReader {
+public class SocialCommandReader implements CommandReader {
 
     private CommandFactory commandFactory;
 
     public SocialCommandReader()
     {
-        this(
-            new SocialCommandFactory(
-                new SocialUserRepository()));
+        this(new SocialCommandFactory());
     }
 
     public SocialCommandReader(CommandFactory commandFactory)
@@ -37,7 +33,7 @@ public class SocialCommandReader {
     }
 
     private List<String> subsetOfListStartingFrom(List<String> list, int startingFrom) {
-        return list.subList(startingFrom, list.size() - 1);
+        return list.subList(startingFrom, list.size());
     }
 
     private String joinListOfStringsWithSpaces(List<String> commandArguments) {

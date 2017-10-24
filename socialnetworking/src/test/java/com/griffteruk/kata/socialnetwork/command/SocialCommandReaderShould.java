@@ -1,16 +1,12 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by User on 21/10/2017.
@@ -20,52 +16,65 @@ public class SocialCommandReaderShould {
 
     private static final String EMPTY_COMMAND = "";
 
+    private static final String NO_USER = "";
+    private static final String NO_OPERATION = "";
+    private static final String NO_MESSAGE = "";
+
+    private static final String USER_ALICE = "Alice";
+    private static final String USER_BOB = "Bob";
+    private static final String ALICE_POST_MESSAGE = "I love the weather today";
+    private static final String ALICE_POST_MESSAGE_WITH_MULTIPLE_WORDS = "Some Message With More Than One Word";
+
+    private static final String POST_OPERATION = "->";
+    private static final String READ_OPERATION = "";
+    private static final String FOLLOWS_OPERATION = "follows";
+    private static final String WALL_OPERATION = "wall";
+
     @Mock
-    private UserRepository userRepository;
+    private CommandFactory commandFactory;
 
     @InjectMocks
-    private SocialCommandFactory commandFactory;
-
     private SocialCommandReader commandReader;
 
-    @Before
-    public void initialise()
+    @Test
+    public void handleEmptyCommand()
     {
-        commandReader = new SocialCommandReader(commandFactory);
+        commandReader.parse(EMPTY_COMMAND);
+        verify(commandFactory).createCommand(NO_USER, NO_OPERATION, NO_MESSAGE);
     }
 
     @Test
-    public void returnEmptyCommandWhenRequestIsEmpty()
+    public void handlePostMessage()
     {
-        assertThat(commandReader.parse(EMPTY_COMMAND),
-                is(instanceOf(EmptyCommand.class)));
+        commandReader.parse("Alice -> I love the weather today");
+        verify(commandFactory).createCommand(USER_ALICE, POST_OPERATION, ALICE_POST_MESSAGE);
     }
 
     @Test
-    public void returnPostCommandWhenRequestIsPost()
+    public void handleReadMessage()
     {
-        assertThat(commandReader.parse("Alice -> I love the weather today"),
-                is(instanceOf(PostCommand.class)));
+        commandReader.parse("Alice");
+        verify(commandFactory).createCommand(USER_ALICE, READ_OPERATION, NO_MESSAGE);
     }
 
     @Test
-    public void returnReadCommandWhenRequestIsRead()
+    public void handleFollowMessage()
     {
-        assertThat(commandReader.parse("Alice"),
-                is(instanceOf(ReadCommand.class)));
+        commandReader.parse("Alice follows Bob");
+        verify(commandFactory).createCommand(USER_ALICE, FOLLOWS_OPERATION, USER_BOB);
     }
 
     @Test
-    public void returnFollowCommandWhenRequestIsFollow()
+    public void handleWallMessage()
     {
-        assertThat(commandReader.parse("Alice follows Bob"),
-                is(instanceOf(FollowCommand.class)));
+        commandReader.parse("Alice wall");
+        verify(commandFactory).createCommand(USER_ALICE, WALL_OPERATION, NO_MESSAGE);
     }
 
     @Test
-    public void returnWallCommandWhenRequestIsWall()
+    public void handleMultiWordPostRequest()
     {
-        assertThat(commandReader.parse("Alice wall"),
-                is(instanceOf(WallCommand.class)));
+        commandReader.parse("Alice -> Some Message With More Than One Word");
+        verify(commandFactory).createCommand(USER_ALICE, POST_OPERATION, ALICE_POST_MESSAGE_WITH_MULTIPLE_WORDS);
     }
 }

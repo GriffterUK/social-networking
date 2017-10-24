@@ -1,5 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 /**
@@ -8,6 +9,11 @@ import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 public class SocialCommandFactory implements CommandFactory {
 
     private UserRepository userRepository;
+
+    public SocialCommandFactory()
+    {
+        this(new SocialUserRepository());
+    }
 
     public SocialCommandFactory(UserRepository userRepository)
     {
