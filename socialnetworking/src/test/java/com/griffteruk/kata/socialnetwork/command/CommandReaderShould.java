@@ -1,31 +1,29 @@
 package com.griffteruk.kata.socialnetwork.command;
 
 import com.griffteruk.kata.socialnetwork.domain.UserRepository;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by User on 21/10/2017.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class CommandReaderShould {
 
     private static final String EMPTY_COMMAND = "";
 
-    private CommandReader commandReader;
-
     @Mock
     private UserRepository userRepository;
 
-    @Before
-    public void initialise()
-    {
-        commandReader = new CommandReader(userRepository);
-    }
+    @InjectMocks
+    private CommandReader commandReader;
 
     @Test
     public void returnEmptyCommandWhenRequestIsEmpty()
