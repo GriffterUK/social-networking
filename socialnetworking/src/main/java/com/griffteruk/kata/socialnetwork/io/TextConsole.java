@@ -4,4 +4,5 @@ public interface TextConsole {
 
     String readLine();
     void writeLine(String text);
+    void writeCaret();
 }

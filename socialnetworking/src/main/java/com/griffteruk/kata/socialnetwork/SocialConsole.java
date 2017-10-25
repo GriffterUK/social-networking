@@ -20,10 +20,10 @@ public class SocialConsole {
 
     public void execute()
     {
-        String textLine = textConsole.readLine();
-        while ( !textLine.isEmpty() ) {
+        String userInput = getUserInput();
+        while ( !userInput.isEmpty() ) {
 
-            Command command = commandReader.parse(textLine);
+            Command command = commandReader.parse(userInput);
 
             if ( command instanceof EmptyCommand ) {
                 break;
@@ -33,8 +33,14 @@ public class SocialConsole {
                 );
             }
 
-            textLine = textConsole.readLine();
+            userInput = getUserInput();
         }
+    }
+
+    protected String getUserInput()
+    {
+        textConsole.writeCaret();
+        return textConsole.readLine();
     }
 
     protected void writeLinesToConsole(List<String> lines)

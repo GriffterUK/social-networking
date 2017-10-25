@@ -23,4 +23,7 @@ public class SystemTextConsole implements TextConsole {
     public void writeLine(String text) {
         System.out.println(text);
     }
+
+    @Override
+    public void writeCaret() { System.out.print("> ");}
 }
