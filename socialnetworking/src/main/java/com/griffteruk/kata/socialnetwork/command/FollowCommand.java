@@ -29,14 +29,19 @@ public class FollowCommand implements Command {
     @Override
     public List<String> process() {
 
-        Optional<User> user = userRepository.findUserByName(userName);
-        Optional<User> userToFollow = userRepository.findUserByName(userNameOfUserToFollow);
+        Optional<User> user = findUserByName(userName);
+        Optional<User> userToFollow = findUserByName(userNameOfUserToFollow);
 
         if (bothUsersExist(user, userToFollow)) {
             user.get().addUserToFollow(userToFollow.get());
         }
 
         return EMPTY_LIST;
+    }
+
+    private Optional<User> findUserByName(String userName)
+    {
+        return userRepository.findUserByName(userName);
     }
 
     private boolean bothUsersExist(Optional<User> someUser, Optional<User> anotherUser) {

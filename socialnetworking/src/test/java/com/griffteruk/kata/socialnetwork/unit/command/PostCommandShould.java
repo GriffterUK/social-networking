@@ -32,12 +32,12 @@ public class PostCommandShould  {
     public void returnAnEmptyListAsResult()
     {
         UserRepository userRepository =
-                MockUserRepositoryBuilder.aMockUserRepository()
-                    .thatFindsUser(
-                            MockUserBuilder.aMockUser()
-                                    .withName(SOME_EXISTING_USER_NAME)
-                                    .build()
-                    ).build();
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatFindsUser(
+                    MockUserBuilder.aMockUser()
+                        .withName(SOME_EXISTING_USER_NAME)
+                        .build()
+                ).build();
 
         assertThat(
                 processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER),
@@ -48,13 +48,13 @@ public class PostCommandShould  {
     public void createNewUserWhenNewUserCreatesTheirFirstPost()
     {
         UserRepository userRepository =
-                MockUserRepositoryBuilder.aMockUserRepository()
-                    .thatDoesNotFindUserWithName(NEW_USER_NAME)
-                    .thatCreatesUser(
-                            MockUserBuilder.aMockUser()
-                                    .withName(NEW_USER_NAME)
-                                    .build()
-                    ).build();
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatDoesNotFindUserWithName(NEW_USER_NAME)
+                .thatCreatesUser(
+                    MockUserBuilder.aMockUser()
+                        .withName(NEW_USER_NAME)
+                        .build()
+                ).build();
 
         assertThat(
                 processPostCommand(userRepository, NEW_USER_NAME, FIRST_POST_OF_NEW_USER),
@@ -67,12 +67,12 @@ public class PostCommandShould  {
     public void notCreateNewUserWhenExistingUserCreatesAPost()
     {
         UserRepository userRepository =
-                MockUserRepositoryBuilder.aMockUserRepository()
-                        .thatFindsUser(
-                                MockUserBuilder.aMockUser()
-                                        .withName(SOME_EXISTING_USER_NAME)
-                                        .build()
-                        ).build();
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatFindsUser(
+                    MockUserBuilder.aMockUser()
+                        .withName(SOME_EXISTING_USER_NAME)
+                        .build()
+                ).build();
 
         processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER);
 
@@ -83,13 +83,13 @@ public class PostCommandShould  {
     public void addPostsToUsersListOfPosts()
     {
         User someUser = MockUserBuilder.aMockUser()
-                .withName(SOME_EXISTING_USER_NAME)
-                .build();
+            .withName(SOME_EXISTING_USER_NAME)
+            .build();
 
         UserRepository userRepository =
-                MockUserRepositoryBuilder.aMockUserRepository()
-                        .thatFindsUser(someUser)
-                        .build();
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatFindsUser(someUser)
+                .build();
 
         processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER );
 

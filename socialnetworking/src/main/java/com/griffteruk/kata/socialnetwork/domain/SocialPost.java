@@ -29,6 +29,7 @@ public class SocialPost implements Post {
         this.timestamp = LocalDateTime.now(clock);
     }
 
+    @Override
     public String getMessage() {
 
         LocalDateTime dateTimeNow = LocalDateTime.now(clock);
@@ -51,13 +52,19 @@ public class SocialPost implements Post {
         return message;
     }
 
+    @Override
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    protected String messageWithUnitsPostfix(long units, String unitName)
+    private String messageWithUnitsPostfix(long units, String unitName)
     {
         return String.format("%s (%d %s ago)", message, units,
-                units > 1 ? unitName + "s" : unitName);
+                units > 1 ? pluralOf(unitName) : unitName);
+    }
+
+    private String pluralOf(String string)
+    {
+        return string + "s";
     }
 }

@@ -33,13 +33,18 @@ public class PostCommand implements Command {
 
         createUserIfNotExists(userName);
 
-        User user = userRepository.findUserByName(userName).get();
-        user.addPost(createPostWithMessage(this.message));
+        findExistingUserByName(userName)
+            .addPost(createPostWithMessage(message));
 
         return EMPTY_LIST;
     }
 
-    protected void createUserIfNotExists(String userName)
+    private User findExistingUserByName(String userName)
+    {
+        return userRepository.findUserByName(userName).get();
+    }
+
+    private void createUserIfNotExists(String userName)
     {
         Optional<User> optionalUser = userRepository.findUserByName(userName);
         if ( optionalUser.isPresent() == false ) {
@@ -47,7 +52,7 @@ public class PostCommand implements Command {
         }
     }
 
-    Post createPostWithMessage(String message)
+    private Post createPostWithMessage(String message)
     {
         return postFactory.createPost(message);
     }

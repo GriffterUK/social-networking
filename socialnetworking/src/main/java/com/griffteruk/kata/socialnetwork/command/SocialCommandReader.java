@@ -21,17 +21,18 @@ public class SocialCommandReader implements CommandReader {
     public Command parse(String commandText)
     {
         List<String> commandArguments =
-                Arrays.asList(commandText.split(BY_SPACES));
+            Arrays.asList(
+                commandText.split(BY_SPACES));
 
         String user =  elementOrDefault(commandArguments, 0, EMPTY_STRING);
         String operation = elementOrDefault(commandArguments, 1, EMPTY_STRING);
 
         String message = commandArguments.size() >= 3 ?
-                joinListOfStringsWithSpaces(
-                        subsetOfListStartingFrom(commandArguments, 2))
-                : "";
+            joinListOfStringsWithSpaces(
+                subsetOfListStartingFrom(commandArguments, 2))
+            : EMPTY_STRING;
 
-        return commandFactory.createCommand(user, operation, message);
+        return commandFor(user, operation, message);
     }
 
     private List<String> subsetOfListStartingFrom(List<String> list, int startingFrom) {
@@ -45,5 +46,10 @@ public class SocialCommandReader implements CommandReader {
     private String elementOrDefault(List<String> elementList, int index, String defaultIfNotExists)
     {
         return ( elementList.size() > index ) ? elementList.get(index) : defaultIfNotExists;
+    }
+
+    private Command commandFor(String user, String operation, String message)
+    {
+        return commandFactory.createCommand(user, operation, message);
     }
 }

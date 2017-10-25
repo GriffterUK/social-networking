@@ -7,6 +7,9 @@ import com.griffteruk.kata.socialnetwork.io.TextConsole;
 
 import java.util.List;
 
+/**
+ * Created by User on 25/10/2017.
+ */
 public class SocialConsole {
 
     private TextConsole textConsole;
@@ -36,18 +39,18 @@ public class SocialConsole {
         }
     }
 
-    protected String getUserInput()
+    private String getUserInput()
     {
         textConsole.writeCaret();
         return textConsole.readLine();
     }
 
-    protected boolean commandIsInvalidOrEmpty(Command command)
+    private boolean commandIsInvalidOrEmpty(Command command)
     {
         return ((command == null) || (command instanceof EmptyCommand));
     }
 
-    protected void writeLinesToConsole(List<String> lines)
+    private void writeLinesToConsole(List<String> lines)
     {
         for (String line : lines) {
             textConsole.writeLine(line);

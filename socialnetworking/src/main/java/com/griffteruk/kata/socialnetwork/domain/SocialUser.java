@@ -8,7 +8,6 @@ import java.util.Stack;
 /**
  * Created by Lee Griffiths on 22/10/2017.
  */
-
 public class SocialUser implements User {
 
     private String name;
@@ -51,7 +50,7 @@ public class SocialUser implements User {
     }
 
     private boolean userIsNotAlreadyBeingFollowed(User user) {
-        return followedUsers.contains(user) == false;
+        return !followedUsers.contains(user);
     }
 }
 

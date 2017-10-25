@@ -28,24 +28,29 @@ public class ReadCommand implements Command {
     @Override
     public List<String> process()
     {
-        Optional<User> user = userRepository.findUserByName(userName);
+        Optional<User> user = findUserByName(userName);
 
         return user.isPresent() ?
-                postMessagesForUser(user.get()) : NO_POSTS;
+                postMessagesForUser(user.get())
+                : NO_POSTS;
     }
 
-    public List<String> postMessagesForUser(User user) {
+    private Optional<User> findUserByName(String userName)
+    {
+        return userRepository.findUserByName(userName);
+    }
+
+    private List<String> postMessagesForUser(User user) {
 
         return postMessagesInReverseChronologicalOrder(
                 user.getPosts());
     }
 
-    protected List<String> postMessagesInReverseChronologicalOrder(List<Post> posts )
+    private List<String> postMessagesInReverseChronologicalOrder(List<Post> posts)
     {
         return posts.stream()
                 .sorted(Comparator.comparing(Post::getTimestamp).reversed())
-                .map(post -> post.getMessage())
+                .map(Post::getMessage)
                 .collect(Collectors.toList());
-
     }
 }

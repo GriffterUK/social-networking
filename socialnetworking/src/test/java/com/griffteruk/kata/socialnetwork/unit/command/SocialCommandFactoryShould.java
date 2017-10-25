@@ -17,19 +17,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SocialCommandFactoryShould {
 
     private static final String EMPTY_USER = "";
-    private static final String EMPTY_OPERATION = "";
-    private static final String EMPTY_MESSAGE = "";
-
     private static final String SOME_USER = "Alice";
     private static final String ANOTHER_USER = "Bob";
 
-    private static final String POST_OPERATION = "->";
+    private static final String EMPTY_MESSAGE = "";
     private static final String POST_MESSAGE = "Hello World";
 
+    private static final String EMPTY_OPERATION = "";
+    private static final String POST_OPERATION = "->";
     private static final String READ_OPERATION = "";
-
     private static final String FOLLOW_OPERATION = "follows";
-
     private static final String WALL_OPERATION = "wall";
 
     @Mock

@@ -31,6 +31,7 @@ import static org.mockito.Mockito.when;
 public class SocialNetworkShould {
 
     private static final String NO_TEXT = "";
+    private static final int ONE_MILLI_SECOND = 1;
 
     @Mock
     private TextConsole textConsole;
@@ -39,11 +40,11 @@ public class SocialNetworkShould {
 
     private UserRepository userRepository;
 
-
     @Before
     public void initialise()
     {
-        PostFactory postFactory = new SocialPostWithDelayFactory(1);
+        PostFactory postFactory =
+                new SocialPostWithDelayFactory(ONE_MILLI_SECOND);
 
         userRepository = new SocialUserRepository();
 
@@ -123,7 +124,7 @@ public class SocialNetworkShould {
         inOrder.verify(textConsole).writeLine(contains("Alice : I love the weather today"));
     }
 
-    protected Optional<User> userWithName(String userName)
+    private Optional<User> userWithName(String userName)
     {
         return userRepository.findUserByName(userName);
     }
@@ -142,7 +143,7 @@ public class SocialNetworkShould {
                 if ( user.isPresent() ) {
                     List<Post> userPosts = user.get().getPosts();
                     for (Post post : userPosts ) {
-                        if ( post.getMessage().contains(message) == true ) {
+                        if ( post.getMessage().contains(message) ) {
                             return true;
                         }
                     }
@@ -157,12 +158,12 @@ public class SocialNetworkShould {
 
                 if ( user.isPresent() ) {
                     if ( user.get().getPosts().size() > 0 ) {
-                        mismatchDescription.appendText("was ").appendValue("not containing any posts");
+                        mismatchDescription.appendText("was not containing any posts");
                     } else {
-                        mismatchDescription.appendText("was ").appendValue("not containing any matching post messages");
+                        mismatchDescription.appendText("was not containing any matching post messages");
                     }
                 } else {
-                    mismatchDescription.appendText("was ").appendValue("a an empty optional user");
+                    mismatchDescription.appendText("was an empty optional user");
                 }
             }
         };

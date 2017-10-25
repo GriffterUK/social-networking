@@ -8,8 +8,10 @@ import java.util.List;
  */
 public class EmptyCommand implements Command {
 
+    private static final List<String> EMPTY_LIST = new ArrayList<>();
+
     @Override
     public List<String> process() {
-        return new ArrayList<>();
+        return EMPTY_LIST;
     }
 }

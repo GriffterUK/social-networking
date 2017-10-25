@@ -8,8 +8,8 @@ import com.griffteruk.kata.socialnetwork.io.SystemTextConsole;
 import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
 
 /**
- * Hello world!
- *
+ * NATTER!
+ * - the console twitter
  */
 
 public class Application

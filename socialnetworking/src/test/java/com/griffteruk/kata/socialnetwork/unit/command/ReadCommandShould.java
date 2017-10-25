@@ -6,11 +6,15 @@ import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 import com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder;
 import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
 import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.griffteruk.kata.socialnetwork.unit.common.Lists.EMPTY_LIST_OF_STRINGS;
@@ -37,72 +41,119 @@ public class ReadCommandShould  {
     public void returnEmptyListForNonExistingUser()
     {
         assertThat(processReadCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
-                        .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
-                        .build(),
-                NON_EXISTENT_USER_NAME),
-                is(EMPTY_LIST_OF_STRINGS));
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
+                .build(),
+            NON_EXISTENT_USER_NAME),
+            is(EMPTY_LIST_OF_STRINGS));
     }
 
     @Test
     public void returnTheUsersPostsAsMessages()
     {
         User user = MockUserBuilder.aMockUser()
-                .withName(SOME_EXISTING_USER_NAME)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_EXISTING_USER)
-                                .withTimestamp(LocalDateTime.now())
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_EXISTING_USER)
-                                .withTimestamp(LocalDateTime.now())
-                                .build()
-                )
-                .build();
+            .withName(SOME_EXISTING_USER_NAME)
+            .withPosts(
+                MockPostBuilder.aMockPost()
+                    .withMessage(FIRST_POST_OF_EXISTING_USER)
+                    .withTimestamp(LocalDateTime.now())
+                    .build(),
+                MockPostBuilder.aMockPost()
+                    .withMessage(SECOND_POST_OF_EXISTING_USER)
+                    .withTimestamp(LocalDateTime.now())
+                    .build()
+            )
+            .build();
 
         List<String> resultOfReadCommand = processReadCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
-                        .thatFindsUser(user)
-                        .build(),
-                SOME_EXISTING_USER_NAME);
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatFindsUser(user)
+                .build(),
+            SOME_EXISTING_USER_NAME);
 
-        assertThat(resultOfReadCommand.size(), is(2));
-        assertTrue(stringListHasStringStartingWith(resultOfReadCommand, FIRST_POST_OF_EXISTING_USER));
-        assertTrue(stringListHasStringStartingWith(resultOfReadCommand, SECOND_POST_OF_EXISTING_USER));
+        assertThat(resultOfReadCommand,
+            containsInOrderStringsStartingWith(
+                FIRST_POST_OF_EXISTING_USER,
+                SECOND_POST_OF_EXISTING_USER));
     }
 
     @Test
     public void returnTheUsersPostsInReverseChronologicalOrder()
     {
         User user = MockUserBuilder.aMockUser()
-                .withName(SOME_EXISTING_USER_NAME)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_EXISTING_USER)
-                                .withTimestamp(ONE_SECOND_LATER)
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_EXISTING_USER)
-                                .withTimestamp(NOW)
-                                .build()
-
-                )
-                .build();
+            .withName(SOME_EXISTING_USER_NAME)
+            .withPosts(
+                MockPostBuilder.aMockPost()
+                    .withMessage(SECOND_POST_OF_EXISTING_USER)
+                    .withTimestamp(ONE_SECOND_LATER)
+                    .build(),
+                MockPostBuilder.aMockPost()
+                    .withMessage(FIRST_POST_OF_EXISTING_USER)
+                    .withTimestamp(NOW)
+                    .build()
+            )
+            .build();
 
         List<String> resultOfReadCommand = processReadCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
-                        .thatFindsUser(user)
-                        .build(),
-                SOME_EXISTING_USER_NAME);
+            MockUserRepositoryBuilder.aMockUserRepository()
+                .thatFindsUser(user)
+                .build(),
+            SOME_EXISTING_USER_NAME);
 
-        assertThat(resultOfReadCommand.size(), is(2));
-        assertTrue(resultOfReadCommand.get(0).startsWith(SECOND_POST_OF_EXISTING_USER));
-        assertTrue(resultOfReadCommand.get(1).startsWith(FIRST_POST_OF_EXISTING_USER));
+        assertThat(resultOfReadCommand,
+            containsInOrderStringsStartingWith(
+                SECOND_POST_OF_EXISTING_USER,
+                FIRST_POST_OF_EXISTING_USER));
     }
 
     private List<String> processReadCommandFor(UserRepository userRepository, String userName) {
         ReadCommand readCommand = new ReadCommand(userRepository, userName);
         return readCommand.process();
+    }
+
+    public static Matcher<List<String>> containsInOrderStringsStartingWith(String... items) {
+        return new TypeSafeMatcher<List<String>>() {
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("expected result all list item strings start with matcher strings ");
+            }
+
+            @Override
+            protected boolean matchesSafely(final List<String> listOfStrings) {
+
+                boolean allItemsMatchInOrder = false;
+
+                List<String> itemsList = Arrays.asList(items);
+                if ( listOfStrings.size() >= itemsList.size() ) {
+
+                    int expectedMatches = itemsList.size();
+                    int actualMatches = 0;
+                    for (int itemIndex = 0; itemIndex < itemsList.size(); itemIndex++) {
+                        if ( listOfStrings.get(itemIndex).startsWith(itemsList.get(itemIndex)) ) {
+                            actualMatches++;
+                        }
+                    }
+
+                    if ( actualMatches == expectedMatches ) {
+                        allItemsMatchInOrder = true;
+                    }
+                }
+
+                return allItemsMatchInOrder;
+            }
+
+            @Override
+            public void describeMismatchSafely(final List<String> listOfStrings,
+                                               final Description mismatchDescription) {
+
+                List<String> itemsList = Arrays.asList(items);
+                if ( listOfStrings.size() < itemsList.size() ) {
+                    mismatchDescription.appendText(" had less items than expected");
+                } else {
+                    mismatchDescription.appendText(" not matching one or more items");
+                }
+            }
+        };
     }
 }
