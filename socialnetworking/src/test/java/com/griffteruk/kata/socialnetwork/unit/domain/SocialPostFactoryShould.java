@@ -6,9 +6,7 @@ import com.griffteruk.kata.socialnetwork.domain.SocialPost;
 import com.griffteruk.kata.socialnetwork.domain.SocialPostFactory;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SocialPostFactoryShould {
@@ -16,8 +14,7 @@ public class SocialPostFactoryShould {
     private static final String POST_MESSAGE = "A Message";
 
     @Test
-    public void createSocialPosts()
-    {
+    public void createSocialPosts() {
         PostFactory socialPostFactory = new SocialPostFactory();
         Post post = socialPostFactory.createPost(POST_MESSAGE);
 

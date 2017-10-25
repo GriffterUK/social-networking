@@ -11,23 +11,20 @@ public class SocialCommandFactory implements CommandFactory {
     private UserRepository userRepository;
     private PostFactory postFactory;
 
-    public SocialCommandFactory(UserRepository userRepository, PostFactory postFactory)
-    {
+    public SocialCommandFactory(UserRepository userRepository, PostFactory postFactory) {
         this.userRepository = userRepository;
         this.postFactory = postFactory;
     }
 
-    public Command createCommand(String userName, String operation, String message)
-    {
+    public Command createCommand(String userName, String operation, String message) {
         Command command = new EmptyCommand();
 
-        switch (operation.toLowerCase())
-        {
+        switch (operation.toLowerCase()) {
             case "->":
                 command = new PostCommand(userRepository, postFactory, userName, message);
                 break;
             case "":
-                if ( userName.isEmpty() == false ) {
+                if (userName.isEmpty() == false) {
                     command = new ReadCommand(userRepository, userName);
                 }
                 break;

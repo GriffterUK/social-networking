@@ -14,8 +14,7 @@ public class SocialUser implements User {
     private List<Post> posts = new Stack<>();
     private List<User> followedUsers = new ArrayList<>();
 
-    public SocialUser(String name)
-    {
+    public SocialUser(String name) {
         this.name = name;
     }
 
@@ -25,16 +24,20 @@ public class SocialUser implements User {
     }
 
     @Override
-    public void addPost(Post post) { this.posts.add(post); }
+    public void addPost(Post post) {
+        this.posts.add(post);
+    }
 
     @Override
-    public List<Post> getPosts() { return Collections.unmodifiableList(posts); }
+    public List<Post> getPosts() {
+        return Collections.unmodifiableList(posts);
+    }
 
     @Override
     public void addUserToFollow(User userToFollow) {
 
         if (userIsNotMe(userToFollow) &&
-            userIsNotAlreadyBeingFollowed(userToFollow)) {
+                userIsNotAlreadyBeingFollowed(userToFollow)) {
             followedUsers.add(userToFollow);
         }
     }
@@ -44,8 +47,7 @@ public class SocialUser implements User {
         return Collections.unmodifiableList(followedUsers);
     }
 
-    private boolean userIsNotMe(User user)
-    {
+    private boolean userIsNotMe(User user) {
         return !(user == this);
     }
 

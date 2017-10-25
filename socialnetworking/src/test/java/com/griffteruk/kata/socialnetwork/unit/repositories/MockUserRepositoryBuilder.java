@@ -16,31 +16,26 @@ public class MockUserRepositoryBuilder {
     private List<String> userNamesNotToFind = new ArrayList<>();
     private List<User> usersToCreate = new ArrayList<>();
 
-    public static MockUserRepositoryBuilder aMockUserRepository()
-    {
+    public static MockUserRepositoryBuilder aMockUserRepository() {
         return new MockUserRepositoryBuilder();
     }
 
-    public MockUserRepositoryBuilder thatDoesNotFindUserWithName(String userName)
-    {
+    public MockUserRepositoryBuilder thatDoesNotFindUserWithName(String userName) {
         userNamesNotToFind.add(userName);
         return this;
     }
 
-    public MockUserRepositoryBuilder thatFindsUser(User user)
-    {
+    public MockUserRepositoryBuilder thatFindsUser(User user) {
         usersToFind.add(user);
         return this;
     }
 
-    public MockUserRepositoryBuilder thatCreatesUser(User user)
-    {
+    public MockUserRepositoryBuilder thatCreatesUser(User user) {
         usersToCreate.add(user);
         return this;
     }
 
-    public UserRepository build()
-    {
+    public UserRepository build() {
         UserRepository userRepository = mock(UserRepository.class);
         for (User user : usersToFind) {
             when(userRepository.findUserByName(user.getName())).thenReturn(Optional.of(user));

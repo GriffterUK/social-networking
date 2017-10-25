@@ -8,5 +8,6 @@ import java.time.LocalDateTime;
 public interface Post {
 
     String getMessage();
+
     LocalDateTime getTimestamp();
 }

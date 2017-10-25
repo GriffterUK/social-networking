@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by User on 25/10/2017.
+ * Created by Lee Griffiths on 25/10/2017.
  */
 public class StringListMatchers {
 
@@ -26,17 +26,17 @@ public class StringListMatchers {
                 boolean allItemsMatchInOrder = false;
 
                 List<String> itemsList = Arrays.asList(items);
-                if ( listOfStrings.size() >= itemsList.size() ) {
+                if (listOfStrings.size() >= itemsList.size()) {
 
                     int expectedMatches = itemsList.size();
                     int actualMatches = 0;
                     for (int itemIndex = 0; itemIndex < itemsList.size(); itemIndex++) {
-                        if ( listOfStrings.get(itemIndex).startsWith(itemsList.get(itemIndex)) ) {
+                        if (listOfStrings.get(itemIndex).startsWith(itemsList.get(itemIndex))) {
                             actualMatches++;
                         }
                     }
 
-                    if ( actualMatches == expectedMatches ) {
+                    if (actualMatches == expectedMatches) {
                         allItemsMatchInOrder = true;
                     }
                 }
@@ -49,7 +49,7 @@ public class StringListMatchers {
                                                final Description mismatchDescription) {
 
                 List<String> itemsList = Arrays.asList(items);
-                if ( listOfStrings.size() < itemsList.size() ) {
+                if (listOfStrings.size() < itemsList.size()) {
                     mismatchDescription.appendText(" had less items than expected");
                 } else {
                     mismatchDescription.appendText(" not matching one or more items");
@@ -57,4 +57,55 @@ public class StringListMatchers {
             }
         };
     }
+
+    public static Matcher<List<String>> containsStringsStartingWith(String... items) {
+        return new TypeSafeMatcher<List<String>>() {
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("expected result is string list contains strings starting with matcher strings");
+            }
+
+            @Override
+            protected boolean matchesSafely(final List<String> listOfStrings) {
+
+                boolean allItemsMatch = false;
+
+                List<String> itemsList = Arrays.asList(items);
+                if (listOfStrings.size() >= itemsList.size()) {
+
+                    int expectedMatches = itemsList.size();
+                    int actualMatches = 0;
+
+                    for (int listIndex = 0; listIndex < listOfStrings.size(); listIndex++) {
+                        for (int itemIndex = 0; itemIndex < itemsList.size(); itemIndex++) {
+                            if (listOfStrings.get(listIndex).startsWith(itemsList.get(itemIndex))) {
+                                actualMatches++;
+                            }
+                        }
+                    }
+
+                    if (actualMatches == expectedMatches) {
+                        allItemsMatch = true;
+                    }
+                }
+
+                return allItemsMatch;
+            }
+
+            @Override
+            public void describeMismatchSafely(final List<String> listOfStrings,
+                                               final Description mismatchDescription) {
+
+                List<String> itemsList = Arrays.asList(items);
+                if (listOfStrings.size() < itemsList.size()) {
+                    mismatchDescription.appendText(" had less items than expected");
+                } else {
+                    mismatchDescription.appendText(" not matching one or more items");
+                }
+            }
+        };
+    }
+
+
 }

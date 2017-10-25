@@ -26,19 +26,18 @@ import static org.mockito.Mockito.verify;
 public class FollowCommandShould {
 
     @Test
-    public void returnAnEmptyListAsResult()
-    {
+    public void returnAnEmptyListAsResult() {
         UserRepository userRepository =
-            aMockUserRepository()
-                .thatFindsUser(
-                    aMockUser()
-                        .withName(SOME_EXISTING_USER_NAME)
-                        .build())
-                .thatFindsUser(
-                    aMockUser()
-                        .withName(SOME_OTHER_EXISTING_USER_NAME)
-                        .build()
-                 ).build();
+                aMockUserRepository()
+                        .thatFindsUser(
+                                aMockUser()
+                                        .withName(SOME_EXISTING_USER_NAME)
+                                        .build())
+                        .thatFindsUser(
+                                aMockUser()
+                                        .withName(SOME_OTHER_EXISTING_USER_NAME)
+                                        .build()
+                        ).build();
 
         List<String> followCommandResult =
                 processFollowCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME);
@@ -47,21 +46,20 @@ public class FollowCommandShould {
     }
 
     @Test
-    public void followUserWhenUserAndUserToFollowBothExist()
-    {
+    public void followUserWhenUserAndUserToFollowBothExist() {
         User user = aMockUser()
-            .withName(SOME_EXISTING_USER_NAME)
-            .build();
+                .withName(SOME_EXISTING_USER_NAME)
+                .build();
 
         User userToFollow = aMockUser()
-            .withName(SOME_OTHER_EXISTING_USER_NAME)
-            .build();
+                .withName(SOME_OTHER_EXISTING_USER_NAME)
+                .build();
 
         UserRepository userRepository =
-            aMockUserRepository()
-                .thatFindsUser(user)
-                .thatFindsUser(userToFollow)
-                .build();
+                aMockUserRepository()
+                        .thatFindsUser(user)
+                        .thatFindsUser(userToFollow)
+                        .build();
 
         List<String> followCommandResult =
                 processFollowCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME);
@@ -72,20 +70,19 @@ public class FollowCommandShould {
     }
 
     @Test
-    public void notFollowUserWhenUserToFollowDoesNotExist()
-    {
+    public void notFollowUserWhenUserToFollowDoesNotExist() {
         User user = aMockUser()
-            .withName(SOME_EXISTING_USER_NAME)
-            .build();
-
-        UserRepository userRepository =
-            aMockUserRepository()
-                .thatFindsUser(user)
-                .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
+                .withName(SOME_EXISTING_USER_NAME)
                 .build();
 
+        UserRepository userRepository =
+                aMockUserRepository()
+                        .thatFindsUser(user)
+                        .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
+                        .build();
+
         List<String> followCommandResult =
-                processFollowCommand( userRepository, SOME_EXISTING_USER_NAME, NON_EXISTENT_USER_NAME);
+                processFollowCommand(userRepository, SOME_EXISTING_USER_NAME, NON_EXISTENT_USER_NAME);
 
         assertThat(followCommandResult, is(EMPTY_LIST_OF_STRINGS));
 

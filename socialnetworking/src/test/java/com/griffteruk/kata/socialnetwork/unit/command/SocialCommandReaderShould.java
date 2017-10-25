@@ -39,43 +39,37 @@ public class SocialCommandReaderShould {
     private SocialCommandReader commandReader;
 
     @Test
-    public void handleEmptyCommand()
-    {
+    public void handleEmptyCommand() {
         commandReader.parse(EMPTY_COMMAND);
         verify(commandFactory).createCommand(NO_USER, NO_OPERATION, NO_MESSAGE);
     }
 
     @Test
-    public void handlePostMessage()
-    {
+    public void handlePostMessage() {
         commandReader.parse("Alice -> I love the weather today");
         verify(commandFactory).createCommand(USER_ALICE, POST_OPERATION, ALICE_POST_MESSAGE);
     }
 
     @Test
-    public void handleReadMessage()
-    {
+    public void handleReadMessage() {
         commandReader.parse("Alice");
         verify(commandFactory).createCommand(USER_ALICE, READ_OPERATION, NO_MESSAGE);
     }
 
     @Test
-    public void handleFollowMessage()
-    {
+    public void handleFollowMessage() {
         commandReader.parse("Alice follows Bob");
         verify(commandFactory).createCommand(USER_ALICE, FOLLOWS_OPERATION, USER_BOB);
     }
 
     @Test
-    public void handleWallMessage()
-    {
+    public void handleWallMessage() {
         commandReader.parse("Alice wall");
         verify(commandFactory).createCommand(USER_ALICE, WALL_OPERATION, NO_MESSAGE);
     }
 
     @Test
-    public void handleMultiWordPostRequest()
-    {
+    public void handleMultiWordPostRequest() {
         commandReader.parse("Alice -> Some Message With More Than One Word");
         verify(commandFactory).createCommand(USER_ALICE, POST_OPERATION, ALICE_POST_MESSAGE_WITH_MULTIPLE_WORDS);
     }

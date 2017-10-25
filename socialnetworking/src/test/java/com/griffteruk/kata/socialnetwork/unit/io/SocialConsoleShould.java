@@ -44,8 +44,7 @@ public class SocialConsoleShould {
 
         private List<String> listOfStringsToEcho;
 
-        public EchoCommand(List<String> listOfStringsToEcho)
-        {
+        public EchoCommand(List<String> listOfStringsToEcho) {
             this.listOfStringsToEcho = listOfStringsToEcho;
         }
 
@@ -56,12 +55,10 @@ public class SocialConsoleShould {
     }
 
 
-
     @Test
-    public void executeUntilEmptyTextLineIsRead()
-    {
+    public void executeUntilEmptyTextLineIsRead() {
         when(textConsole.readLine())
-            .thenReturn(NO_TEXT);
+                .thenReturn(NO_TEXT);
 
         socialConsole.execute();
 
@@ -70,8 +67,7 @@ public class SocialConsoleShould {
     }
 
     @Test
-    public void notWriteLinesForEmptyCommand()
-    {
+    public void notWriteLinesForEmptyCommand() {
         when(textConsole.readLine())
                 .thenReturn(EMPTY_COMMAND_TEXT);
 
@@ -85,8 +81,7 @@ public class SocialConsoleShould {
     }
 
     @Test
-    public void writeLinesForCommandWithLines()
-    {
+    public void writeLinesForCommandWithLines() {
         when(textConsole.readLine())
                 .thenReturn(ECHO_COMMAND_TEXT)
                 .thenReturn(NO_TEXT);
@@ -94,8 +89,8 @@ public class SocialConsoleShould {
         when(commandReader.parse(ECHO_COMMAND_TEXT)).
                 thenReturn(new EchoCommand(
                         Arrays.asList(
-                            FIRST_LINE_OF_ECHO_COMMAND,
-                            SECOND_LINE_OF_ECHO_COMMAND
+                                FIRST_LINE_OF_ECHO_COMMAND,
+                                SECOND_LINE_OF_ECHO_COMMAND
                         )
                 ));
 

@@ -1,7 +1,7 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.domain.UserPost;
 import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.domain.UserPost;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 import java.time.LocalDateTime;
@@ -28,14 +28,14 @@ public class WallCommand implements Command {
     public List<String> process() {
 
         Optional<User> optionalUser = userRepository.findUserByName(userName);
-        if ( optionalUser.isPresent() ) {
+        if (optionalUser.isPresent()) {
 
             User user = optionalUser.get();
 
             List<UserPost> userPostsInterestedIn =
-                combinePosts(
-                    userPostsForUser(user),
-                    postsFromUsersFollowedBy(user));
+                    combinePosts(
+                            userPostsForUser(user),
+                            postsFromUsersFollowedBy(user));
 
             return postMessagesInReverseChronologicalOrder(userPostsInterestedIn);
         }
@@ -43,15 +43,14 @@ public class WallCommand implements Command {
         return EMPTY_LIST;
     }
 
-    private List<UserPost> userPostsForUser(User user)
-    {
-       return user.getPosts()
+    private List<UserPost> userPostsForUser(User user) {
+        return user.getPosts()
                 .stream()
                 .map(post -> new UserPost(user, post))
                 .collect(Collectors.toList());
     }
 
-    private List<UserPost> postsFromUsersFollowedBy(User user ) {
+    private List<UserPost> postsFromUsersFollowedBy(User user) {
 
         return user.getFollowedUsers()
                 .stream()
@@ -60,19 +59,17 @@ public class WallCommand implements Command {
                 .collect(Collectors.toList());
     }
 
-    private List<UserPost> combinePosts(List<UserPost>... listsOfUsersPosts)
-    {
+    private List<UserPost> combinePosts(List<UserPost>... listsOfUsersPosts) {
         return Arrays.stream(listsOfUsersPosts)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    private List<String> postMessagesInReverseChronologicalOrder(List<UserPost> posts)
-    {
+    private List<String> postMessagesInReverseChronologicalOrder(List<UserPost> posts) {
         return posts.stream()
                 .sorted(Comparator.comparing(
                         (Function<UserPost, LocalDateTime>)
-                                x -> x.getPost().getTimestamp() )
+                                x -> x.getPost().getTimestamp())
                         .reversed())
                 .map(UserPost::toString)
                 .collect(Collectors.toList());

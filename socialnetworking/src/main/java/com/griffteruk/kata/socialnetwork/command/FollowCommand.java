@@ -19,8 +19,7 @@ public class FollowCommand implements Command {
     private String userName;
     private String userNameOfUserToFollow;
 
-    public FollowCommand(UserRepository userRepository, String userName, String userNameOfUserToFollow)
-    {
+    public FollowCommand(UserRepository userRepository, String userName, String userNameOfUserToFollow) {
         this.userRepository = userRepository;
         this.userName = userName;
         this.userNameOfUserToFollow = userNameOfUserToFollow;
@@ -39,8 +38,7 @@ public class FollowCommand implements Command {
         return EMPTY_LIST;
     }
 
-    private Optional<User> findUserByName(String userName)
-    {
+    private Optional<User> findUserByName(String userName) {
         return userRepository.findUserByName(userName);
     }
 

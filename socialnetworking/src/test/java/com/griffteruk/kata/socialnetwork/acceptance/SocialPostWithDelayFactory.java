@@ -8,8 +8,7 @@ public class SocialPostWithDelayFactory implements PostFactory {
 
     private int delayInMilliseconds;
 
-    public SocialPostWithDelayFactory(int delayInMilliSeconds)
-    {
+    public SocialPostWithDelayFactory(int delayInMilliSeconds) {
         this.delayInMilliseconds = delayInMilliSeconds;
     }
 

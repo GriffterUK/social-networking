@@ -1,11 +1,17 @@
 package com.griffteruk.kata.socialnetwork.unit.domain;
 
-import com.griffteruk.kata.socialnetwork.domain.SocialPost;
+import com.griffteruk.kata.socialnetwork.domain.Post;
 import com.griffteruk.kata.socialnetwork.domain.SocialUser;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder.aMockPost;
+import static com.griffteruk.test.matchers.StringListMatchers.containsStringsStartingWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -16,48 +22,61 @@ public class SocialUserShould {
 
     private static final String SOME_USER_NAME = "Jim";
     private static final String SOME_USERS_FIRST_POST = "Hello World!";
+    private static final String SOME_USERS_SECOND_POST = "How are we today?";
     private static final String USER_NAME_TO_FOLLOW = "Bob";
 
     public static final int NONE = 0;
 
+    private static final LocalDateTime DATE_TIME_OF_POST_CREATION = LocalDateTime.now();
+
     private SocialUser someUser;
 
     @Before
-    public void initialise()
-    {
+    public void initialise() {
         someUser = new SocialUser(SOME_USER_NAME);
     }
 
     @Test
-    public void returnSameNameAsTheOneProvided()
-    {
+    public void returnSameNameAsTheOneProvided() {
         assertThat(someUser.getName(), is(SOME_USER_NAME));
     }
 
     @Test
-    public void notReturnAnyPostsWhenNoPostsHaveBeenAdded()
-    {
+    public void notReturnAnyPostsWhenNoPostsHaveBeenAdded() {
         assertThat(numberOfPostsForUser(someUser), is(NONE));
     }
 
     @Test
-    public void returnAllPostsThatWereAdded()
-    {
-        someUser.addPost(new SocialPost(SOME_USERS_FIRST_POST));
+    public void returnAllPostsThatWereAdded() {
+        Post usersFirstPost = aMockPost()
+                .withMessage(SOME_USERS_FIRST_POST)
+                .withTimestamp(DATE_TIME_OF_POST_CREATION)
+                .build();
 
-        assertThat(numberOfPostsForUser(someUser), is(1));
-        assertThat(firstPostMessageForUser(someUser), is(SOME_USERS_FIRST_POST));
+        Post usersSecondPost = aMockPost()
+                .withMessage(SOME_USERS_SECOND_POST)
+                .withTimestamp(DATE_TIME_OF_POST_CREATION)
+                .build();
+
+        someUser.addPost(usersFirstPost);
+        someUser.addPost(usersSecondPost);
+
+        assertThat(numberOfPostsForUser(someUser), is(2));
+
+        assertThat(usersPostMessages(someUser),
+                containsStringsStartingWith(
+                        SOME_USERS_FIRST_POST,
+                        SOME_USERS_SECOND_POST
+                ));
     }
 
     @Test
-    public void notReturnAnyUsersThatHaveNotBeenFollowed()
-    {
+    public void notReturnAnyUsersThatHaveNotBeenFollowed() {
         assertThat(numberOfFollowedUsersForUser(someUser), is(NONE));
     }
 
     @Test
-    public void returnUsersThatHaveBeenFollowed()
-    {
+    public void returnUsersThatHaveBeenFollowed() {
         User userToFollow = new SocialUser(USER_NAME_TO_FOLLOW);
         someUser.addUserToFollow(userToFollow);
 
@@ -66,29 +85,27 @@ public class SocialUserShould {
     }
 
     @Test
-    public void notAllowUserToFollowThemselves()
-    {
+    public void notAllowUserToFollowThemselves() {
         someUser.addUserToFollow(someUser);
         assertThat(numberOfFollowedUsersForUser(someUser), is(NONE));
     }
 
-    protected int numberOfPostsForUser(User user)
-    {
+    private int numberOfPostsForUser(User user) {
         return user.getPosts().size();
     }
 
-    protected String firstPostMessageForUser(User user)
-    {
-        return user.getPosts().size() > 0 ? user.getPosts().get(0).getMessage() : "";
+    private List<String> usersPostMessages(User user) {
+        return user.getPosts()
+                .stream()
+                .map(Post::getMessage)
+                .collect(Collectors.toList());
     }
 
-    protected int numberOfFollowedUsersForUser(User user)
-    {
+    private int numberOfFollowedUsersForUser(User user) {
         return user.getFollowedUsers().size();
     }
 
-    protected User firstFollowedUserForUser(User user)
-    {
+    private User firstFollowedUserForUser(User user) {
         return user.getFollowedUsers().size() > 0 ? user.getFollowedUsers().get(0) : null;
     }
 

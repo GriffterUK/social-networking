@@ -11,8 +11,7 @@ import static org.junit.Assert.assertTrue;
 public class EmptyCommandShould {
 
     @Test
-    public void returnEmptyList()
-    {
+    public void returnEmptyList() {
         EmptyCommand emptyCommand = new EmptyCommand();
         assertTrue(emptyCommand.process().isEmpty());
     }

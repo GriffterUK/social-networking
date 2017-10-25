@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by User on 25/10/2017.
+ * Created by Lee Griffiths on 25/10/2017.
  */
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,8 +25,7 @@ public class UserPostShould {
     private UserPost userPost;
 
     @Before
-    public void initialise()
-    {
+    public void initialise() {
         user = MockUserBuilder
                 .aMockUser()
                 .withName(NEW_USER_NAME)
@@ -41,20 +40,17 @@ public class UserPostShould {
     }
 
     @Test
-    public void returnSameUserAsProvided()
-    {
+    public void returnSameUserAsProvided() {
         assertThat(userPost.getUser(), is(user));
     }
 
     @Test
-    public void returnSamePostAsProvided()
-    {
+    public void returnSamePostAsProvided() {
         assertThat(userPost.getPost(), is(post));
     }
 
     @Test
-    public void combineUserNameAndPostMessageInToString()
-    {
+    public void combineUserNameAndPostMessageInToString() {
         String combinedUserNameAndPostMessage =
                 user.getName() + " : " + post.getMessage();
 

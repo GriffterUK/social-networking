@@ -9,6 +9,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockClockBuilder.aMockClock;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
@@ -33,16 +35,14 @@ public class SocialPostShould {
     private static final LocalDateTime DATE_TIME_OF_POST_CREATION = LocalDateTime.now();
 
     @Test
-    public void returnSameMessageAsTheOneProvided()
-    {
+    public void returnSameMessageAsTheOneProvided() {
         Post somePost = new SocialPost(SOME_POST_MESSAGE);
         assertThat(somePost.getMessage(), is(SOME_POST_MESSAGE));
     }
 
     @Test
-    public void returnTimestampOfWhenPostWasFirstCreated()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
+    public void returnTimestampOfWhenPostWasFirstCreated() {
+        Clock clock = aMockClock()
                 .withFixedDateTimeOf(DATE_TIME_OF_POST_CREATION)
                 .build();
 
@@ -54,101 +54,78 @@ public class SocialPostShould {
     }
 
     @Test
-    public void returnMessageWithDayPostfixWhenPostWasCreatedExactlyOneDayAgo()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
-                .withSequenceOfDateTimes(
-                        DATE_TIME_OF_POST_CREATION,
-                        daysSince(DATE_TIME_OF_POST_CREATION, ONE_DAY))
-                .build();
+    public void returnMessageWithDayPostfixWhenPostWasCreatedExactlyOneDayAgo() {
+        Post newPost = postAtRetrievalDateTimeOf(
+                daysSince(DATE_TIME_OF_POST_CREATION, ONE_DAY)
+        );
 
-        Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
-
-        assertThat(newPost.getMessage().contains("1 day ago"), is(true));
+        assertThat(newPost.getMessage(), containsString("1 day ago"));
     }
 
     @Test
-    public void returnMessageWithDaysPostfixWhenPostWasCreatedMoreThanOneDayAgo()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
-                .withSequenceOfDateTimes(
-                        DATE_TIME_OF_POST_CREATION,
-                        daysSince(DATE_TIME_OF_POST_CREATION, TWO_DAYS))
-                .build();
+    public void returnMessageWithDaysPostfixWhenPostWasCreatedMoreThanOneDayAgo() {
+        Post newPost = postAtRetrievalDateTimeOf(
+                daysSince(DATE_TIME_OF_POST_CREATION, TWO_DAYS)
+        );
 
-        Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
-
-        assertThat(newPost.getMessage().contains("2 days ago"), is(true));
+        assertThat(newPost.getMessage(), containsString("2 days ago"));
     }
 
     @Test
-    public void returnMessageWithMinutePostfixWhenPostWasCreatedExactlyOneMinuteAgo()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
-                .withSequenceOfDateTimes(
-                        DATE_TIME_OF_POST_CREATION,
-                        minutesSince(DATE_TIME_OF_POST_CREATION, ONE_MINUTE))
-                .build();
+    public void returnMessageWithMinutePostfixWhenPostWasCreatedExactlyOneMinuteAgo() {
+        Post newPost = postAtRetrievalDateTimeOf(
+                minutesSince(DATE_TIME_OF_POST_CREATION, ONE_MINUTE)
+        );
 
-        Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
-
-        assertThat(newPost.getMessage().contains("1 minute ago"), is(true));
+        assertThat(newPost.getMessage(), containsString("1 minute ago"));
     }
 
     @Test
-    public void returnMessageWithMinutesPostfixWhenPostWasCreatedMoreThanOneMinuteAgo()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
-                .withSequenceOfDateTimes(
-                        DATE_TIME_OF_POST_CREATION,
-                        minutesSince(DATE_TIME_OF_POST_CREATION, FIVE_MINUTES))
-                .build();
+    public void returnMessageWithMinutesPostfixWhenPostWasCreatedMoreThanOneMinuteAgo() {
+        Post newPost = postAtRetrievalDateTimeOf(
+                minutesSince(DATE_TIME_OF_POST_CREATION, FIVE_MINUTES)
+        );
 
-        Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
-
-        assertThat(newPost.getMessage().contains("5 minutes ago"), is(true));
+        assertThat(newPost.getMessage(), containsString("5 minutes ago"));
     }
 
     @Test
-    public void returnMessageWitSecondPostfixWhenPostWasCreatedExactlyOneSecondAgo()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
-                .withSequenceOfDateTimes(
-                        DATE_TIME_OF_POST_CREATION,
-                        secondsSince(DATE_TIME_OF_POST_CREATION, ONE_SECOND))
-                .build();
+    public void returnMessageWitSecondPostfixWhenPostWasCreatedExactlyOneSecondAgo() {
+        Post newPost = postAtRetrievalDateTimeOf(
+                secondsSince(DATE_TIME_OF_POST_CREATION, ONE_SECOND)
+        );
 
-        Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
-
-        assertThat(newPost.getMessage().contains("1 second ago"), is(true));
+        assertThat(newPost.getMessage(), containsString("1 second ago"));
     }
 
     @Test
-    public void returnMessageWithSecondsPostfixWhenPostWasCreatedMoreThanOneSecondAgo()
-    {
-        Clock clock = MockClockBuilder.aMockClock()
-                .withSequenceOfDateTimes(
-                        DATE_TIME_OF_POST_CREATION,
-                        secondsSince(DATE_TIME_OF_POST_CREATION, TWELVE_SECONDS))
-                .build();
+    public void returnMessageWithSecondsPostfixWhenPostWasCreatedMoreThanOneSecondAgo() {
+        Post newPost = postAtRetrievalDateTimeOf(
+                secondsSince(DATE_TIME_OF_POST_CREATION, TWELVE_SECONDS)
+        );
 
-        Post newPost = new SocialPost(clock, SOME_POST_MESSAGE);
-
-        assertThat(newPost.getMessage().contains("12 seconds ago"), is(true));
+        assertThat(newPost.getMessage(), containsString("12 seconds ago"));
     }
 
-    protected LocalDateTime daysSince(LocalDateTime localDateTime, int numberOfDays)
-    {
+    private Post postAtRetrievalDateTimeOf(LocalDateTime localDateTime) {
+        Clock clock = aMockClock()
+                .withSequenceOfDateTimes(
+                        DATE_TIME_OF_POST_CREATION,
+                        localDateTime)
+                .build();
+
+        return new SocialPost(clock, SOME_POST_MESSAGE);
+    }
+
+    private LocalDateTime daysSince(LocalDateTime localDateTime, int numberOfDays) {
         return localDateTime.minusDays(numberOfDays * -1);
     }
 
-    protected LocalDateTime minutesSince(LocalDateTime localDateTime, int numberOfMinutes)
-    {
+    private LocalDateTime minutesSince(LocalDateTime localDateTime, int numberOfMinutes) {
         return localDateTime.minusMinutes(numberOfMinutes * -1);
     }
 
-    protected LocalDateTime secondsSince(LocalDateTime localDateTime, int numberOfSeconds)
-    {
+    private LocalDateTime secondsSince(LocalDateTime localDateTime, int numberOfSeconds) {
         return localDateTime.minusSeconds(numberOfSeconds * -1);
     }
 }

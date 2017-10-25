@@ -41,17 +41,16 @@ public class SocialNetworkShould {
     private UserRepository userRepository;
 
     @Before
-    public void initialise()
-    {
+    public void initialise() {
         PostFactory postFactory =
                 new SocialPostWithDelayFactory(ONE_MILLI_SECOND);
 
         userRepository = new SocialUserRepository();
 
         socialConsole = new SocialConsole(textConsole,
-                            new SocialCommandReader(
-                                new SocialCommandFactory(
-                                        userRepository, postFactory)));
+                new SocialCommandReader(
+                        new SocialCommandFactory(
+                                userRepository, postFactory)));
     }
 
     @Test
@@ -124,8 +123,7 @@ public class SocialNetworkShould {
         inOrder.verify(textConsole).writeLine(contains("Alice : I love the weather today"));
     }
 
-    private Optional<User> userWithName(String userName)
-    {
+    private Optional<User> userWithName(String userName) {
         return userRepository.findUserByName(userName);
     }
 
@@ -140,10 +138,10 @@ public class SocialNetworkShould {
 
             @Override
             protected boolean matchesSafely(final Optional<User> user) {
-                if ( user.isPresent() ) {
+                if (user.isPresent()) {
                     List<Post> userPosts = user.get().getPosts();
-                    for (Post post : userPosts ) {
-                        if ( post.getMessage().contains(message) ) {
+                    for (Post post : userPosts) {
+                        if (post.getMessage().contains(message)) {
                             return true;
                         }
                     }
@@ -156,8 +154,8 @@ public class SocialNetworkShould {
             public void describeMismatchSafely(final Optional<User> user,
                                                final Description mismatchDescription) {
 
-                if ( user.isPresent() ) {
-                    if ( user.get().getPosts().size() > 0 ) {
+                if (user.isPresent()) {
+                    if (user.get().getPosts().size() > 0) {
                         mismatchDescription.appendText("was not containing any posts");
                     } else {
                         mismatchDescription.appendText("was not containing any matching post messages");
@@ -179,14 +177,14 @@ public class SocialNetworkShould {
 
             @Override
             protected boolean matchesSafely(final Optional<T> optional) {
-                return ( optional.isPresent());
+                return (optional.isPresent());
             }
 
             @Override
             public void describeMismatchSafely(final Optional<T> optional,
                                                final Description mismatchDescription) {
 
-                if ( optional.isPresent() ) {
+                if (optional.isPresent()) {
                     mismatchDescription.appendText("was ").appendValue("false (it was not empty");
                 } else {
                     mismatchDescription.appendText("was ").appendValue("true (it was empty)");

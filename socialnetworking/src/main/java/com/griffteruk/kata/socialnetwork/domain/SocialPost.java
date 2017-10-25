@@ -17,13 +17,11 @@ public class SocialPost implements Post {
     private String message;
     private LocalDateTime timestamp;
 
-    public SocialPost(String message)
-    {
+    public SocialPost(String message) {
         this(Clock.systemDefaultZone(), message);
     }
 
-    public SocialPost(Clock clock, String message)
-    {
+    public SocialPost(Clock clock, String message) {
         this.clock = clock;
         this.message = message;
         this.timestamp = LocalDateTime.now(clock);
@@ -35,12 +33,12 @@ public class SocialPost implements Post {
         LocalDateTime dateTimeNow = LocalDateTime.now(clock);
 
         long daysSincePost = ChronoUnit.DAYS.between(timestamp, dateTimeNow);
-        if ( daysSincePost >= 1) {
+        if (daysSincePost >= 1) {
             return messageWithUnitsPostfix(daysSincePost, DAY_UNIT_NAME);
         }
 
         long minutesSincePost = ChronoUnit.MINUTES.between(timestamp, dateTimeNow);
-        if ( minutesSincePost >= 1) {
+        if (minutesSincePost >= 1) {
             return messageWithUnitsPostfix(minutesSincePost, MINUTE_UNIT_NAME);
         }
 
@@ -57,14 +55,12 @@ public class SocialPost implements Post {
         return timestamp;
     }
 
-    private String messageWithUnitsPostfix(long units, String unitName)
-    {
+    private String messageWithUnitsPostfix(long units, String unitName) {
         return String.format("%s (%d %s ago)", message, units,
                 units > 1 ? pluralOf(unitName) : unitName);
     }
 
-    private String pluralOf(String string)
-    {
+    private String pluralOf(String string) {
         return string + "s";
     }
 }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by User on 25/10/2017.
+ * Created by Lee Griffiths on 25/10/2017.
  */
 public class SystemTextConsole implements TextConsole {
 
@@ -13,8 +13,8 @@ public class SystemTextConsole implements TextConsole {
     public String readLine() {
 
         BufferedReader systemInBufferedReader =
-            new BufferedReader(
-                new InputStreamReader(System.in));
+                new BufferedReader(
+                        new InputStreamReader(System.in));
 
         try {
             return systemInBufferedReader.readLine();
@@ -30,5 +30,7 @@ public class SystemTextConsole implements TextConsole {
     }
 
     @Override
-    public void writeCaret() { System.out.print("> ");}
+    public void writeCaret() {
+        System.out.print("> ");
+    }
 }

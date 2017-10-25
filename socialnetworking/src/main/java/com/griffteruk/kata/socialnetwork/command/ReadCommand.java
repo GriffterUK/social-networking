@@ -26,8 +26,7 @@ public class ReadCommand implements Command {
     }
 
     @Override
-    public List<String> process()
-    {
+    public List<String> process() {
         Optional<User> user = findUserByName(userName);
 
         return user.isPresent() ?
@@ -35,8 +34,7 @@ public class ReadCommand implements Command {
                 : NO_POSTS;
     }
 
-    private Optional<User> findUserByName(String userName)
-    {
+    private Optional<User> findUserByName(String userName) {
         return userRepository.findUserByName(userName);
     }
 
@@ -46,8 +44,7 @@ public class ReadCommand implements Command {
                 user.getPosts());
     }
 
-    private List<String> postMessagesInReverseChronologicalOrder(List<Post> posts)
-    {
+    private List<String> postMessagesInReverseChronologicalOrder(List<Post> posts) {
         return posts.stream()
                 .sorted(Comparator.comparing(Post::getTimestamp).reversed())
                 .map(Post::getMessage)

@@ -26,18 +26,17 @@ import static org.mockito.Mockito.*;
  * Created by Lee Griffiths on 21/10/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PostCommandShould  {
+public class PostCommandShould {
 
     @Test
-    public void returnAnEmptyListAsResult()
-    {
+    public void returnAnEmptyListAsResult() {
         UserRepository userRepository =
-            aMockUserRepository()
-                .thatFindsUser(
-                    aMockUser()
-                        .withName(SOME_EXISTING_USER_NAME)
-                        .build()
-                ).build();
+                aMockUserRepository()
+                        .thatFindsUser(
+                                aMockUser()
+                                        .withName(SOME_EXISTING_USER_NAME)
+                                        .build()
+                        ).build();
 
         assertThat(
                 processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER),
@@ -45,16 +44,15 @@ public class PostCommandShould  {
     }
 
     @Test
-    public void createNewUserWhenNewUserCreatesTheirFirstPost()
-    {
+    public void createNewUserWhenNewUserCreatesTheirFirstPost() {
         UserRepository userRepository =
-            aMockUserRepository()
-                .thatDoesNotFindUserWithName(NEW_USER_NAME)
-                .thatCreatesUser(
-                    aMockUser()
-                        .withName(NEW_USER_NAME)
-                        .build()
-                ).build();
+                aMockUserRepository()
+                        .thatDoesNotFindUserWithName(NEW_USER_NAME)
+                        .thatCreatesUser(
+                                aMockUser()
+                                        .withName(NEW_USER_NAME)
+                                        .build()
+                        ).build();
 
         assertThat(
                 processPostCommand(userRepository, NEW_USER_NAME, FIRST_POST_OF_NEW_USER),
@@ -64,15 +62,14 @@ public class PostCommandShould  {
     }
 
     @Test
-    public void notCreateNewUserWhenExistingUserCreatesAPost()
-    {
+    public void notCreateNewUserWhenExistingUserCreatesAPost() {
         UserRepository userRepository =
-            aMockUserRepository()
-                .thatFindsUser(
-                    aMockUser()
-                        .withName(SOME_EXISTING_USER_NAME)
-                        .build()
-                ).build();
+                aMockUserRepository()
+                        .thatFindsUser(
+                                aMockUser()
+                                        .withName(SOME_EXISTING_USER_NAME)
+                                        .build()
+                        ).build();
 
         processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER);
 
@@ -80,18 +77,17 @@ public class PostCommandShould  {
     }
 
     @Test
-    public void addPostsToUsersListOfPosts()
-    {
+    public void addPostsToUsersListOfPosts() {
         User someUser = aMockUser()
-            .withName(SOME_EXISTING_USER_NAME)
-            .build();
-
-        UserRepository userRepository =
-            aMockUserRepository()
-                .thatFindsUser(someUser)
+                .withName(SOME_EXISTING_USER_NAME)
                 .build();
 
-        processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER );
+        UserRepository userRepository =
+                aMockUserRepository()
+                        .thatFindsUser(someUser)
+                        .build();
+
+        processPostCommand(userRepository, SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER);
 
         verify(someUser).addPost(any(Post.class));
     }

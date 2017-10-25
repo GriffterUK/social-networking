@@ -11,28 +11,24 @@ public class MockClockBuilder {
 
     List<Instant> clockInstants = new ArrayList<>();
 
-    public static MockClockBuilder aMockClock()
-    {
+    public static MockClockBuilder aMockClock() {
         return new MockClockBuilder();
     }
 
-    public MockClockBuilder withFixedDateTimeOf(LocalDateTime dateTime)
-    {
+    public MockClockBuilder withFixedDateTimeOf(LocalDateTime dateTime) {
         clockInstants.add(dateTimeToInstant(dateTime));
         return this;
     }
 
-    public MockClockBuilder withSequenceOfDateTimes(LocalDateTime... dateTimes)
-    {
-        for (LocalDateTime dateTime : dateTimes ) {
+    public MockClockBuilder withSequenceOfDateTimes(LocalDateTime... dateTimes) {
+        for (LocalDateTime dateTime : dateTimes) {
             clockInstants.add(dateTimeToInstant(dateTime));
         }
 
         return this;
     }
 
-    public Clock build()
-    {
+    public Clock build() {
         Clock clock = mock(Clock.class);
 
         org.mockito.stubbing.OngoingStubbing clockStubbing
@@ -47,8 +43,7 @@ public class MockClockBuilder {
         return clock;
     }
 
-    protected Instant dateTimeToInstant(LocalDateTime dateTime)
-    {
+    private Instant dateTimeToInstant(LocalDateTime dateTime) {
         return dateTime.atOffset(ZoneOffset.UTC).toInstant();
     }
 }
