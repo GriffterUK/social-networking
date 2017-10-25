@@ -101,7 +101,7 @@ public class WallCommand implements Command {
                         (Function<UserPost, LocalDateTime>)
                                 x -> x.getPost().getTimestamp() )
                         .reversed())
-                .map(userPost -> new String(userPost.user.getName() + " : " + userPost.post.getMessage()))
+                .map(userPost -> new String(userPost.getUser().getName() + " : " + userPost.getPost().getMessage()))
                 .collect(Collectors.toList());
     }
 }

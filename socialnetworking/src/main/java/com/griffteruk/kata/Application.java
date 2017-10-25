@@ -1,8 +1,11 @@
 package com.griffteruk.kata;
 
 import com.griffteruk.kata.socialnetwork.SocialConsole;
+import com.griffteruk.kata.socialnetwork.command.SocialCommandFactory;
 import com.griffteruk.kata.socialnetwork.command.SocialCommandReader;
+import com.griffteruk.kata.socialnetwork.domain.SocialPostFactory;
 import com.griffteruk.kata.socialnetwork.io.SystemTextConsole;
+import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
 
 /**
  * Hello world!
@@ -17,7 +20,9 @@ public class Application
 
         SocialConsole socialConsole = new SocialConsole(
                 new SystemTextConsole(),
-                new SocialCommandReader()
+                new SocialCommandReader(new SocialCommandFactory(
+                        new SocialUserRepository(),
+                        new SocialPostFactory()))
         );
 
         socialConsole.execute();

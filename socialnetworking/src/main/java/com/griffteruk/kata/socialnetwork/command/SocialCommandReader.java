@@ -7,11 +7,6 @@ public class SocialCommandReader implements CommandReader {
 
     private CommandFactory commandFactory;
 
-    public SocialCommandReader()
-    {
-        this(new SocialCommandFactory());
-    }
-
     public SocialCommandReader(CommandFactory commandFactory)
     {
         this.commandFactory = commandFactory;
