@@ -1,5 +1,7 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.PostFactory;
+import com.griffteruk.kata.socialnetwork.domain.SocialPostFactory;
 import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
@@ -9,15 +11,24 @@ import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 public class SocialCommandFactory implements CommandFactory {
 
     private UserRepository userRepository;
+    private PostFactory postFactory;
 
     public SocialCommandFactory()
     {
-        this(new SocialUserRepository());
+        this(new SocialUserRepository(),
+             new SocialPostFactory());
     }
 
     public SocialCommandFactory(UserRepository userRepository)
     {
+        this(userRepository,
+             new SocialPostFactory());
+    }
+
+    public SocialCommandFactory(UserRepository userRepository, PostFactory postFactory)
+    {
         this.userRepository = userRepository;
+        this.postFactory = postFactory;
     }
 
     public Command createCommand(String userName, String operation, String message)
@@ -27,7 +38,7 @@ public class SocialCommandFactory implements CommandFactory {
         switch (operation.toLowerCase())
         {
             case "->":
-                command = new PostCommand(userRepository, userName, message);
+                command = new PostCommand(userRepository, postFactory, userName, message);
                 break;
             case "":
                 if ( userName.isEmpty() == false ) {

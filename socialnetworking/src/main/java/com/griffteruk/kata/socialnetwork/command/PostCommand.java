@@ -1,6 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.domain.SocialPost;
+import com.griffteruk.kata.socialnetwork.domain.PostFactory;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
@@ -14,11 +14,13 @@ import java.util.Optional;
 public class PostCommand implements Command {
 
     private UserRepository userRepository;
+    private PostFactory postFactory;
     private String userName;
     private String message;
 
-    public PostCommand(UserRepository userRepository, String userName, String message) {
+    public PostCommand(UserRepository userRepository, PostFactory postFactory, String userName, String message) {
         this.userRepository = userRepository;
+        this.postFactory = postFactory;
         this.userName = userName;
         this.message = message;
     }
@@ -29,7 +31,7 @@ public class PostCommand implements Command {
         createUserIfNotExists(userName);
 
         User user = userRepository.findUserByName(userName).get();
-        user.addPost(new SocialPost(this.message));
+        user.addPost(postFactory.createPost(this.message));
 
         return new ArrayList<>();
     }

@@ -40,10 +40,10 @@ public class FollowCommandShould {
                                         .build()
                         ).build();
 
-        assertThat(processFollowCommand(
-                userRepository,
-                SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME),
-                is(EMPTY_LIST_OF_STRINGS));
+        List<String> followCommandResult =
+                processFollowCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME);
+
+        assertThat(followCommandResult, is(EMPTY_LIST_OF_STRINGS));
     }
 
     @Test
@@ -63,10 +63,10 @@ public class FollowCommandShould {
                     .thatFindsUser(userToFollow)
                     .build();
 
-        assertThat(processFollowCommand(
-                userRepository,
-                SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME),
-                is(EMPTY_LIST_OF_STRINGS));
+        List<String> followCommandResult =
+                processFollowCommand(userRepository, SOME_EXISTING_USER_NAME, SOME_OTHER_EXISTING_USER_NAME);
+
+        assertThat(followCommandResult, is(EMPTY_LIST_OF_STRINGS));
 
         verify(user).addUserToFollow(userToFollow);
     }
@@ -84,10 +84,10 @@ public class FollowCommandShould {
                         .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
                         .build();
 
-        assertThat(processFollowCommand(
-                userRepository,
-                SOME_EXISTING_USER_NAME, NON_EXISTENT_USER_NAME),
-                is(EMPTY_LIST_OF_STRINGS));
+        List<String> followCommandResult =
+                processFollowCommand( userRepository, SOME_EXISTING_USER_NAME, NON_EXISTENT_USER_NAME);
+
+        assertThat(followCommandResult, is(EMPTY_LIST_OF_STRINGS));
 
         verify(user, never()).addUserToFollow(any(User.class));
     }

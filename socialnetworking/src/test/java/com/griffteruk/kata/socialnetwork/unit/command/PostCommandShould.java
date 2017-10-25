@@ -2,6 +2,7 @@ package com.griffteruk.kata.socialnetwork.unit.command;
 
 import com.griffteruk.kata.socialnetwork.command.PostCommand;
 import com.griffteruk.kata.socialnetwork.domain.Post;
+import com.griffteruk.kata.socialnetwork.domain.PostFactory;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
@@ -96,7 +97,7 @@ public class PostCommandShould  {
     }
 
     private List<String> processPostCommand(UserRepository userRepository, String userName, String userPost) {
-        PostCommand postCommand = new PostCommand(userRepository, userName, userPost);
+        PostCommand postCommand = new PostCommand(userRepository, mock(PostFactory.class), userName, userPost);
         return postCommand.process();
     }
 }
