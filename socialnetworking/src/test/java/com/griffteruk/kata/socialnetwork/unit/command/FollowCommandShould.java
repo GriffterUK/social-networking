@@ -3,8 +3,6 @@ package com.griffteruk.kata.socialnetwork.unit.command;
 import com.griffteruk.kata.socialnetwork.command.FollowCommand;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
-import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
-import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -13,6 +11,8 @@ import java.util.List;
 
 import static com.griffteruk.kata.socialnetwork.unit.common.Lists.EMPTY_LIST_OF_STRINGS;
 import static com.griffteruk.kata.socialnetwork.unit.common.Users.*;
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder.aMockUser;
+import static com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder.aMockUserRepository;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;
@@ -29,13 +29,13 @@ public class FollowCommandShould {
     public void returnAnEmptyListAsResult()
     {
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(
-                    MockUserBuilder.aMockUser()
+                    aMockUser()
                         .withName(SOME_EXISTING_USER_NAME)
                         .build())
                 .thatFindsUser(
-                    MockUserBuilder.aMockUser()
+                    aMockUser()
                         .withName(SOME_OTHER_EXISTING_USER_NAME)
                         .build()
                  ).build();
@@ -49,16 +49,16 @@ public class FollowCommandShould {
     @Test
     public void followUserWhenUserAndUserToFollowBothExist()
     {
-        User user = MockUserBuilder.aMockUser()
+        User user = aMockUser()
             .withName(SOME_EXISTING_USER_NAME)
             .build();
 
-        User userToFollow = MockUserBuilder.aMockUser()
+        User userToFollow = aMockUser()
             .withName(SOME_OTHER_EXISTING_USER_NAME)
             .build();
 
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(user)
                 .thatFindsUser(userToFollow)
                 .build();
@@ -74,12 +74,12 @@ public class FollowCommandShould {
     @Test
     public void notFollowUserWhenUserToFollowDoesNotExist()
     {
-        User user = MockUserBuilder.aMockUser()
+        User user = aMockUser()
             .withName(SOME_EXISTING_USER_NAME)
             .build();
 
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(user)
                 .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
                 .build();

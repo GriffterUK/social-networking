@@ -16,7 +16,6 @@ public class MockUserRepositoryBuilder {
     private List<String> userNamesNotToFind = new ArrayList<>();
     private List<User> usersToCreate = new ArrayList<>();
 
-
     public static MockUserRepositoryBuilder aMockUserRepository()
     {
         return new MockUserRepositoryBuilder();

@@ -5,8 +5,6 @@ import com.griffteruk.kata.socialnetwork.domain.Post;
 import com.griffteruk.kata.socialnetwork.domain.PostFactory;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
-import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
-import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -18,6 +16,8 @@ import static com.griffteruk.kata.socialnetwork.unit.common.Posts.FIRST_POST_OF_
 import static com.griffteruk.kata.socialnetwork.unit.common.Posts.FIRST_POST_OF_NEW_USER;
 import static com.griffteruk.kata.socialnetwork.unit.common.Users.NEW_USER_NAME;
 import static com.griffteruk.kata.socialnetwork.unit.common.Users.SOME_EXISTING_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder.aMockUser;
+import static com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder.aMockUserRepository;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
@@ -32,9 +32,9 @@ public class PostCommandShould  {
     public void returnAnEmptyListAsResult()
     {
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(
-                    MockUserBuilder.aMockUser()
+                    aMockUser()
                         .withName(SOME_EXISTING_USER_NAME)
                         .build()
                 ).build();
@@ -48,10 +48,10 @@ public class PostCommandShould  {
     public void createNewUserWhenNewUserCreatesTheirFirstPost()
     {
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatDoesNotFindUserWithName(NEW_USER_NAME)
                 .thatCreatesUser(
-                    MockUserBuilder.aMockUser()
+                    aMockUser()
                         .withName(NEW_USER_NAME)
                         .build()
                 ).build();
@@ -67,9 +67,9 @@ public class PostCommandShould  {
     public void notCreateNewUserWhenExistingUserCreatesAPost()
     {
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(
-                    MockUserBuilder.aMockUser()
+                    aMockUser()
                         .withName(SOME_EXISTING_USER_NAME)
                         .build()
                 ).build();
@@ -82,12 +82,12 @@ public class PostCommandShould  {
     @Test
     public void addPostsToUsersListOfPosts()
     {
-        User someUser = MockUserBuilder.aMockUser()
+        User someUser = aMockUser()
             .withName(SOME_EXISTING_USER_NAME)
             .build();
 
         UserRepository userRepository =
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(someUser)
                 .build();
 

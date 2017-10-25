@@ -3,29 +3,24 @@ package com.griffteruk.kata.socialnetwork.unit.command;
 import com.griffteruk.kata.socialnetwork.command.ReadCommand;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
-import com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder;
-import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
-import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.griffteruk.kata.socialnetwork.unit.common.Lists.EMPTY_LIST_OF_STRINGS;
-import static com.griffteruk.kata.socialnetwork.unit.common.Lists.stringListHasStringStartingWith;
 import static com.griffteruk.kata.socialnetwork.unit.common.Posts.FIRST_POST_OF_EXISTING_USER;
 import static com.griffteruk.kata.socialnetwork.unit.common.Posts.SECOND_POST_OF_EXISTING_USER;
 import static com.griffteruk.kata.socialnetwork.unit.common.Users.NON_EXISTENT_USER_NAME;
 import static com.griffteruk.kata.socialnetwork.unit.common.Users.SOME_EXISTING_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder.aMockPost;
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder.aMockUser;
+import static com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder.aMockUserRepository;
+import static com.griffteruk.test.matchers.StringListMatchers.containsInOrderStringsStartingWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Lee Griffiths on 22/10/2017.
@@ -41,7 +36,7 @@ public class ReadCommandShould  {
     public void returnEmptyListForNonExistingUser()
     {
         assertThat(processReadCommandFor(
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
                 .build(),
             NON_EXISTENT_USER_NAME),
@@ -49,45 +44,16 @@ public class ReadCommandShould  {
     }
 
     @Test
-    public void returnTheUsersPostsAsMessages()
-    {
-        User user = MockUserBuilder.aMockUser()
-            .withName(SOME_EXISTING_USER_NAME)
-            .withPosts(
-                MockPostBuilder.aMockPost()
-                    .withMessage(FIRST_POST_OF_EXISTING_USER)
-                    .withTimestamp(LocalDateTime.now())
-                    .build(),
-                MockPostBuilder.aMockPost()
-                    .withMessage(SECOND_POST_OF_EXISTING_USER)
-                    .withTimestamp(LocalDateTime.now())
-                    .build()
-            )
-            .build();
-
-        List<String> resultOfReadCommand = processReadCommandFor(
-            MockUserRepositoryBuilder.aMockUserRepository()
-                .thatFindsUser(user)
-                .build(),
-            SOME_EXISTING_USER_NAME);
-
-        assertThat(resultOfReadCommand,
-            containsInOrderStringsStartingWith(
-                FIRST_POST_OF_EXISTING_USER,
-                SECOND_POST_OF_EXISTING_USER));
-    }
-
-    @Test
     public void returnTheUsersPostsInReverseChronologicalOrder()
     {
-        User user = MockUserBuilder.aMockUser()
+        User user = aMockUser()
             .withName(SOME_EXISTING_USER_NAME)
             .withPosts(
-                MockPostBuilder.aMockPost()
+                aMockPost()
                     .withMessage(SECOND_POST_OF_EXISTING_USER)
                     .withTimestamp(ONE_SECOND_LATER)
                     .build(),
-                MockPostBuilder.aMockPost()
+                aMockPost()
                     .withMessage(FIRST_POST_OF_EXISTING_USER)
                     .withTimestamp(NOW)
                     .build()
@@ -95,7 +61,7 @@ public class ReadCommandShould  {
             .build();
 
         List<String> resultOfReadCommand = processReadCommandFor(
-            MockUserRepositoryBuilder.aMockUserRepository()
+            aMockUserRepository()
                 .thatFindsUser(user)
                 .build(),
             SOME_EXISTING_USER_NAME);
@@ -111,49 +77,5 @@ public class ReadCommandShould  {
         return readCommand.process();
     }
 
-    public static Matcher<List<String>> containsInOrderStringsStartingWith(String... items) {
-        return new TypeSafeMatcher<List<String>>() {
 
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("expected result all list item strings start with matcher strings ");
-            }
-
-            @Override
-            protected boolean matchesSafely(final List<String> listOfStrings) {
-
-                boolean allItemsMatchInOrder = false;
-
-                List<String> itemsList = Arrays.asList(items);
-                if ( listOfStrings.size() >= itemsList.size() ) {
-
-                    int expectedMatches = itemsList.size();
-                    int actualMatches = 0;
-                    for (int itemIndex = 0; itemIndex < itemsList.size(); itemIndex++) {
-                        if ( listOfStrings.get(itemIndex).startsWith(itemsList.get(itemIndex)) ) {
-                            actualMatches++;
-                        }
-                    }
-
-                    if ( actualMatches == expectedMatches ) {
-                        allItemsMatchInOrder = true;
-                    }
-                }
-
-                return allItemsMatchInOrder;
-            }
-
-            @Override
-            public void describeMismatchSafely(final List<String> listOfStrings,
-                                               final Description mismatchDescription) {
-
-                List<String> itemsList = Arrays.asList(items);
-                if ( listOfStrings.size() < itemsList.size() ) {
-                    mismatchDescription.appendText(" had less items than expected");
-                } else {
-                    mismatchDescription.appendText(" not matching one or more items");
-                }
-            }
-        };
-    }
 }

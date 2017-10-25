@@ -3,9 +3,9 @@ package com.griffteruk.kata.socialnetwork.unit.command;
 import com.griffteruk.kata.socialnetwork.command.WallCommand;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
-import com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder;
-import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
-import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder.aMockPost;
+import static com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder.aMockUser;
+import static com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder.aMockUserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -17,6 +17,7 @@ import static com.griffteruk.kata.socialnetwork.unit.common.Lists.EMPTY_LIST_OF_
 import static com.griffteruk.kata.socialnetwork.unit.common.Lists.stringListHasStringStartingWith;
 import static com.griffteruk.kata.socialnetwork.unit.common.Posts.*;
 import static com.griffteruk.kata.socialnetwork.unit.common.Users.*;
+import static com.griffteruk.test.matchers.StringListMatchers.containsInOrderStringsStartingWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -33,7 +34,7 @@ public class WallCommandShould {
     public void returnEmptyListForNonExistingUser()
     {
         assertThat(processWallCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
+                aMockUserRepository()
                         .thatDoesNotFindUserWithName(NON_EXISTENT_USER_NAME)
                         .build(),
                 NON_EXISTENT_USER_NAME),
@@ -43,72 +44,77 @@ public class WallCommandShould {
     @Test
     public void returnTheUsersPostsWhenTheyFollowNobody()
     {
-        User user = MockUserBuilder.aMockUser()
-                .withName(SOME_EXISTING_USER_NAME)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_EXISTING_USER)
-                                .withTimestamp(NOW)
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_EXISTING_USER)
-                                .withTimestamp(NOW)
-                                .build()
-                )
-                .build();
+        User user = aMockUser()
+            .withName(SOME_EXISTING_USER_NAME)
+            .withPosts(
+                aMockPost()
+                    .withMessage(FIRST_POST_OF_EXISTING_USER)
+                    .withTimestamp(NOW)
+                    .build(),
+                aMockPost()
+                    .withMessage(SECOND_POST_OF_EXISTING_USER)
+                    .withTimestamp(TWO_SECONDS_LATER)
+                    .build()
+            )
+            .build();
 
         List<String> resultOfWallCommand = processWallCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
+                aMockUserRepository()
                     .thatFindsUser(user)
                     .build(),
                 SOME_EXISTING_USER_NAME);
 
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
-                SOME_EXISTING_USER_NAME + " : " + FIRST_POST_OF_EXISTING_USER));
-
-        assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
-                SOME_EXISTING_USER_NAME + " : " + SECOND_POST_OF_EXISTING_USER));
+        assertThat(resultOfWallCommand,
+            containsInOrderStringsStartingWith(
+                userPostMessage(SOME_EXISTING_USER_NAME, SECOND_POST_OF_EXISTING_USER),
+                userPostMessage(SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER)
+         ));
     }
 
     @Test
     public void returnTheUsersPostsAndThePostsOfTheUsersTheyFollow()
     {
-        User followedUser = MockUserBuilder.aMockUser()
-                .withName(FOLLOWED_USER_NAME)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_FOLLOWED_USER)
-                                .withTimestamp(NOW)
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_FOLLOWED_USER)
-                                .withTimestamp(NOW)
-                                .build()
-                )
-                .build();
+        User followedUser = aMockUser()
+            .withName(FOLLOWED_USER_NAME)
+            .withPosts(
+                aMockPost()
+                    .withMessage(FIRST_POST_OF_FOLLOWED_USER)
+                    .withTimestamp(NOW)
+                    .build(),
+                aMockPost()
+                    .withMessage(SECOND_POST_OF_FOLLOWED_USER)
+                    .withTimestamp(NOW)
+                    .build()
+            )
+            .build();
 
-
-        User user = MockUserBuilder.aMockUser()
-                .withName(SOME_EXISTING_USER_NAME)
-                .followingUser(followedUser)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_EXISTING_USER)
-                                .withTimestamp(NOW)
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_EXISTING_USER)
-                                .withTimestamp(NOW)
-                                .build()
-                )
-                .build();
+        User user = aMockUser()
+            .withName(SOME_EXISTING_USER_NAME)
+            .followingUser(followedUser)
+            .withPosts(
+                aMockPost()
+                    .withMessage(FIRST_POST_OF_EXISTING_USER)
+                    .withTimestamp(NOW)
+                    .build(),
+                aMockPost()
+                    .withMessage(SECOND_POST_OF_EXISTING_USER)
+                    .withTimestamp(NOW)
+                    .build()
+            )
+            .build();
 
         List<String> resultOfWallCommand = processWallCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
+                aMockUserRepository()
                         .thatFindsUser(user)
                         .thatFindsUser(followedUser)
                         .build(),
                 SOME_EXISTING_USER_NAME);
+
+//        assertThat(resultOfWallCommand,
+//                containsInOrderStringsStartingWith(
+//                        userPostMessage(SOME_EXISTING_USER_NAME, SECOND_POST_OF_EXISTING_USER),
+//                        userPostMessage(SOME_EXISTING_USER_NAME, FIRST_POST_OF_EXISTING_USER)
+//                ));
 
         assertTrue(stringListHasStringStartingWith(resultOfWallCommand,
                 SOME_EXISTING_USER_NAME + " : " + FIRST_POST_OF_EXISTING_USER));
@@ -125,38 +131,38 @@ public class WallCommandShould {
     @Test
     public void returnAllPostsInReverseChronologicalOrder()
     {
-        User followedUser = MockUserBuilder.aMockUser()
-                .withName(FOLLOWED_USER_NAME)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_FOLLOWED_USER)
-                                .withTimestamp(TWO_SECONDS_LATER)
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_FOLLOWED_USER)
-                                .withTimestamp(SEVEN_DAYS_LATER)
-                                .build()
-                )
-                .build();
+        User followedUser = aMockUser()
+            .withName(FOLLOWED_USER_NAME)
+            .withPosts(
+                aMockPost()
+                    .withMessage(FIRST_POST_OF_FOLLOWED_USER)
+                    .withTimestamp(TWO_SECONDS_LATER)
+                    .build(),
+                aMockPost()
+                    .withMessage(SECOND_POST_OF_FOLLOWED_USER)
+                    .withTimestamp(SEVEN_DAYS_LATER)
+                    .build()
+            )
+            .build();
 
 
-        User user = MockUserBuilder.aMockUser()
-                .withName(SOME_EXISTING_USER_NAME)
-                .followingUser(followedUser)
-                .withPosts(
-                        MockPostBuilder.aMockPost()
-                                .withMessage(FIRST_POST_OF_EXISTING_USER)
-                                .withTimestamp(NOW)
-                                .build(),
-                        MockPostBuilder.aMockPost()
-                                .withMessage(SECOND_POST_OF_EXISTING_USER)
-                                .withTimestamp(FOUR_MINUTES_LATER)
-                                .build()
-                )
-                .build();
+        User user = aMockUser()
+            .withName(SOME_EXISTING_USER_NAME)
+            .followingUser(followedUser)
+            .withPosts(
+                aMockPost()
+                    .withMessage(FIRST_POST_OF_EXISTING_USER)
+                    .withTimestamp(NOW)
+                    .build(),
+                aMockPost()
+                    .withMessage(SECOND_POST_OF_EXISTING_USER)
+                    .withTimestamp(FOUR_MINUTES_LATER)
+                    .build()
+            )
+            .build();
 
         List<String> resultOfWallCommand = processWallCommandFor(
-                MockUserRepositoryBuilder.aMockUserRepository()
+                aMockUserRepository()
                         .thatFindsUser(user)
                         .thatFindsUser(followedUser)
                         .build(),
@@ -173,5 +179,10 @@ public class WallCommandShould {
     private List<String> processWallCommandFor(UserRepository userRepository, String userName) {
         WallCommand wallCommand = new WallCommand(userRepository, userName);
         return wallCommand.process();
+    }
+
+    private String userPostMessage(String user, String message)
+    {
+        return user + " : " + message;
     }
 }
