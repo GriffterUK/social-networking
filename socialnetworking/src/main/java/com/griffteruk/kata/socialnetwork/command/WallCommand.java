@@ -5,22 +5,19 @@ import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 public class WallCommand implements Command {
 
     class UserPost
     {
-        private User user;
-        private Post post;
+        private final User user;
+        private final Post post;
 
         public UserPost(User user, Post post)
         {
@@ -31,11 +28,18 @@ public class WallCommand implements Command {
         public User getUser() {
             return user;
         }
-
         public Post getPost() {
             return post;
         }
+
+        @Override
+        public String toString()
+        {
+            return getUser().getName() + " : " + getPost().getMessage();
+        }
     }
+
+    private static final List<String> EMPTY_LIST = new ArrayList<>();
 
     private UserRepository userRepository;
     private String userName;
@@ -54,44 +58,38 @@ public class WallCommand implements Command {
             User user = optionalUser.get();
 
             List<UserPost> userPostsInterestedIn =
-                    combinePosts(
-                            userPostsForUser(user),
-                            postsFromUsersFollowedBy(user));
+                combinePosts(
+                    userPostsForUser(user),
+                    postsFromUsersFollowedBy(user));
 
             return postMessagesInReverseChronologicalOrder(userPostsInterestedIn);
         }
 
-        return new ArrayList<>();
+        return EMPTY_LIST;
     }
 
     private List<UserPost> userPostsForUser(User user)
     {
-        List<UserPost> userPosts = new ArrayList<>();
-        for (Post userPost : user.getPosts()) {
-            userPosts.add(new UserPost(user, userPost));
-        }
-
-        return userPosts;
-    }
-
-    private List<UserPost> combinePosts(List<UserPost>... listsOfUsersPosts)
-    {
-        List<UserPost> combinedUsersPosts = new ArrayList<>();
-        for (List<UserPost> listOfPosts : listsOfUsersPosts) {
-            combinedUsersPosts.addAll(listOfPosts);
-        }
-
-        return combinedUsersPosts;
+       return user.getPosts()
+                .stream()
+                .map(post -> new UserPost(user, post))
+                .collect(Collectors.toList());
     }
 
     private List<UserPost> postsFromUsersFollowedBy(User user ) {
 
-        List<UserPost> userPosts = new ArrayList<>();
-        for(User followedUser : user.getFollowedUsers()) {
-            userPosts.addAll(userPostsForUser(followedUser));
-        }
+        return user.getFollowedUsers()
+                .stream()
+                .map(this::userPostsForUser)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
 
-        return userPosts;
+    private List<UserPost> combinePosts(List<UserPost>... listsOfUsersPosts)
+    {
+        return Arrays.stream(listsOfUsersPosts)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     private List<String> postMessagesInReverseChronologicalOrder(List<UserPost> posts)
@@ -101,7 +99,7 @@ public class WallCommand implements Command {
                         (Function<UserPost, LocalDateTime>)
                                 x -> x.getPost().getTimestamp() )
                         .reversed())
-                .map(userPost -> new String(userPost.getUser().getName() + " : " + userPost.getPost().getMessage()))
+                .map(UserPost::toString)
                 .collect(Collectors.toList());
     }
 }

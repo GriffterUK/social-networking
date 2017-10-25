@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by User on 22/10/2017.
+ * Created by Lee Griffiths on 22/10/2017.
  */
 public class SocialUserShould {
 

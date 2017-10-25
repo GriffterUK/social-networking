@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Created by User on 22/10/2017.
+ * Created by Lee Griffiths on 22/10/2017.
  */
 public class SocialPost implements Post {
 

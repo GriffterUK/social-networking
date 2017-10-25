@@ -11,7 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.verify;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SocialCommandReaderShould {

@@ -1,5 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
+import com.griffteruk.kata.socialnetwork.domain.Post;
 import com.griffteruk.kata.socialnetwork.domain.PostFactory;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
@@ -9,9 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 public class PostCommand implements Command {
+
+    private static final List<String> EMPTY_LIST = new ArrayList<>();
 
     private UserRepository userRepository;
     private PostFactory postFactory;
@@ -31,9 +34,9 @@ public class PostCommand implements Command {
         createUserIfNotExists(userName);
 
         User user = userRepository.findUserByName(userName).get();
-        user.addPost(postFactory.createPost(this.message));
+        user.addPost(createPostWithMessage(this.message));
 
-        return new ArrayList<>();
+        return EMPTY_LIST;
     }
 
     protected void createUserIfNotExists(String userName)
@@ -43,4 +46,10 @@ public class PostCommand implements Command {
             userRepository.createUser(userName);
         }
     }
+
+    Post createPostWithMessage(String message)
+    {
+        return postFactory.createPost(message);
+    }
+
 }

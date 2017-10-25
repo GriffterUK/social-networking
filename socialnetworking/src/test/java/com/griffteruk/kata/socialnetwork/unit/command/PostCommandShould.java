@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PostCommandShould  {

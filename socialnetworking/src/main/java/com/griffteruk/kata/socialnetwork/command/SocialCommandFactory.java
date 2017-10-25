@@ -4,18 +4,12 @@ import com.griffteruk.kata.socialnetwork.domain.PostFactory;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 public class SocialCommandFactory implements CommandFactory {
 
     private UserRepository userRepository;
     private PostFactory postFactory;
-
-//    public SocialCommandFactory()
-//    {
-//        this(new SocialUserRepository(),
-//             new SocialPostFactory());
-//    }
 
     public SocialCommandFactory(UserRepository userRepository, PostFactory postFactory)
     {

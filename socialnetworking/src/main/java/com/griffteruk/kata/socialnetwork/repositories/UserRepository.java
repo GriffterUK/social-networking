@@ -5,7 +5,7 @@ import com.griffteruk.kata.socialnetwork.domain.User;
 import java.util.Optional;
 
 /**
- * Created by User on 22/10/2017.
+ * Created by Lee Griffiths on 22/10/2017.
  */
 public interface UserRepository {
 

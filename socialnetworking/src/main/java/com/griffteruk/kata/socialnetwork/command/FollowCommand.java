@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 public class FollowCommand implements Command {
+
+    private static final List<String> EMPTY_LIST = new ArrayList<>();
 
     private UserRepository userRepository;
 
@@ -34,7 +36,7 @@ public class FollowCommand implements Command {
             user.get().addUserToFollow(userToFollow.get());
         }
 
-        return new ArrayList<>();
+        return EMPTY_LIST;
     }
 
     private boolean bothUsersExist(Optional<User> someUser, Optional<User> anotherUser) {

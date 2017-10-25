@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by User on 22/10/2017.
+ * Created by Lee Griffiths on 22/10/2017.
  */
 
 public class SocialUser implements User {

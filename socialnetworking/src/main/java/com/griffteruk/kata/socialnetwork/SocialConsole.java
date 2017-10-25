@@ -20,20 +20,19 @@ public class SocialConsole {
 
     public void execute()
     {
-        String userInput = getUserInput();
-        while ( !userInput.isEmpty() ) {
+        while (true) {
+
+            String userInput = getUserInput();
 
             Command command = commandReader.parse(userInput);
 
-            if ( command instanceof EmptyCommand ) {
-                break;
-            } else {
-                writeLinesToConsole(
-                    command.process()
-                );
+            if (commandIsInvalidOrEmpty(command)) {
+                return;
             }
 
-            userInput = getUserInput();
+            writeLinesToConsole(
+                command.process()
+            );
         }
     }
 
@@ -41,6 +40,11 @@ public class SocialConsole {
     {
         textConsole.writeCaret();
         return textConsole.readLine();
+    }
+
+    protected boolean commandIsInvalidOrEmpty(Command command)
+    {
+        return ((command == null) || (command instanceof EmptyCommand));
     }
 
     protected void writeLinesToConsole(List<String> lines)

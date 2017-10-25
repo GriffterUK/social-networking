@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Created by User on 21/10/2017.
+ * Created by Lee Griffiths on 21/10/2017.
  */
 public class ReadCommand implements Command {
 
@@ -44,7 +44,7 @@ public class ReadCommand implements Command {
     {
         return posts.stream()
                 .sorted(Comparator.comparing(Post::getTimestamp).reversed())
-                .map(post -> new String(post.getMessage()))
+                .map(post -> post.getMessage())
                 .collect(Collectors.toList());
 
     }
