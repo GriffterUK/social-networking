@@ -1,8 +1,8 @@
 package com.griffteruk.kata;
 
 import com.griffteruk.kata.socialnetwork.SocialConsole;
-import com.griffteruk.kata.socialnetwork.unit.command.SocialCommandReader;
-import com.griffteruk.kata.socialnetwork.unit.io.SystemTextConsole;
+import com.griffteruk.kata.socialnetwork.command.SocialCommandReader;
+import com.griffteruk.kata.socialnetwork.io.SystemTextConsole;
 
 /**
  * Hello world!

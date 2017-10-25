@@ -1,9 +1,9 @@
 package com.griffteruk.kata.socialnetwork;
 
-import com.griffteruk.kata.socialnetwork.unit.command.Command;
-import com.griffteruk.kata.socialnetwork.unit.command.CommandReader;
-import com.griffteruk.kata.socialnetwork.unit.command.EmptyCommand;
-import com.griffteruk.kata.socialnetwork.unit.io.TextConsole;
+import com.griffteruk.kata.socialnetwork.command.Command;
+import com.griffteruk.kata.socialnetwork.command.CommandReader;
+import com.griffteruk.kata.socialnetwork.command.EmptyCommand;
+import com.griffteruk.kata.socialnetwork.io.TextConsole;
 
 import java.util.List;
 

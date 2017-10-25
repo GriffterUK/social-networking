@@ -1,7 +1,7 @@
-package com.griffteruk.kata.socialnetwork.unit.command;
+package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.unit.repositories.SocialUserRepository;
-import com.griffteruk.kata.socialnetwork.unit.repositories.UserRepository;
+import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 /**
  * Created by User on 21/10/2017.
@@ -24,7 +24,7 @@ public class SocialCommandFactory implements CommandFactory {
     {
         Command command = new EmptyCommand();
 
-        switch (operation)
+        switch (operation.toLowerCase())
         {
             case "->":
                 command = new PostCommand(userRepository, userName, message);

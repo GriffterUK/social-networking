@@ -1,5 +1,8 @@
 package com.griffteruk.kata.socialnetwork.unit.domain;
 
+import com.griffteruk.kata.socialnetwork.domain.Post;
+import com.griffteruk.kata.socialnetwork.domain.User;
+
 import java.util.ArrayList;
 import java.util.List;
 

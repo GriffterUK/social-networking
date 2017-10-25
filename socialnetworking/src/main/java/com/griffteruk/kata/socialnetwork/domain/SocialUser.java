@@ -1,8 +1,9 @@
-package com.griffteruk.kata.socialnetwork.unit.domain;
+package com.griffteruk.kata.socialnetwork.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by User on 22/10/2017.
@@ -11,7 +12,7 @@ import java.util.List;
 public class SocialUser implements User {
 
     private String name;
-    private List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new Stack<>();
     private List<User> followedUsers = new ArrayList<>();
 
     public SocialUser(String name)
@@ -25,16 +26,10 @@ public class SocialUser implements User {
     }
 
     @Override
-    public void addPost(Post post)
-    {
-        this.posts.add(post);
-    }
+    public void addPost(Post post) { this.posts.add(post); }
 
     @Override
-    public List<Post> getPosts()
-    {
-        return Collections.unmodifiableList(posts);
-    }
+    public List<Post> getPosts() { return Collections.unmodifiableList(posts); }
 
     @Override
     public void addUserToFollow(User userToFollow) {

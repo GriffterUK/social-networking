@@ -1,4 +1,4 @@
-package com.griffteruk.kata.socialnetwork.unit.io;
+package com.griffteruk.kata.socialnetwork.io;
 
 public interface TextConsole {
 

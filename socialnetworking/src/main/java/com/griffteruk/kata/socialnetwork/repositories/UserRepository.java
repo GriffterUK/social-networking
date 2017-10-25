@@ -1,6 +1,6 @@
-package com.griffteruk.kata.socialnetwork.unit.repositories;
+package com.griffteruk.kata.socialnetwork.repositories;
 
-import com.griffteruk.kata.socialnetwork.unit.domain.User;
+import com.griffteruk.kata.socialnetwork.domain.User;
 
 import java.util.Optional;
 

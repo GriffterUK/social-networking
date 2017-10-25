@@ -1,8 +1,8 @@
-package com.griffteruk.kata.socialnetwork.unit.command;
+package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.unit.domain.Post;
-import com.griffteruk.kata.socialnetwork.unit.domain.User;
-import com.griffteruk.kata.socialnetwork.unit.repositories.UserRepository;
+import com.griffteruk.kata.socialnetwork.domain.Post;
+import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Comparator;

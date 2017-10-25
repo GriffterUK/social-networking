@@ -1,4 +1,4 @@
-package com.griffteruk.kata.socialnetwork.unit.domain;
+package com.griffteruk.kata.socialnetwork.domain;
 
 import java.util.List;
 

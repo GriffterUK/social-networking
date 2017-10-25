@@ -1,17 +1,16 @@
 package com.griffteruk.kata.socialnetwork.unit.repositories;
 
-import com.griffteruk.kata.socialnetwork.unit.domain.User;
+import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static com.griffteruk.kata.socialnetwork.unit.common.Users.ANOTHER_NEW_USER_NAME;
-import static com.griffteruk.kata.socialnetwork.unit.common.Users.NEW_USER_NAME;
-import static com.griffteruk.kata.socialnetwork.unit.common.Users.NON_EXISTENT_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.unit.common.Users.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by User on 22/10/2017.

@@ -1,4 +1,4 @@
-package com.griffteruk.kata.socialnetwork.unit.command;
+package com.griffteruk.kata.socialnetwork.command;
 
 import java.util.ArrayList;
 import java.util.List;

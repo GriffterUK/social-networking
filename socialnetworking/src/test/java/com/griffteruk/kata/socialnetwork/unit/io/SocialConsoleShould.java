@@ -1,9 +1,10 @@
 package com.griffteruk.kata.socialnetwork.unit.io;
 
 import com.griffteruk.kata.socialnetwork.SocialConsole;
-import com.griffteruk.kata.socialnetwork.unit.command.Command;
-import com.griffteruk.kata.socialnetwork.unit.command.CommandReader;
-import com.griffteruk.kata.socialnetwork.unit.command.EmptyCommand;
+import com.griffteruk.kata.socialnetwork.command.Command;
+import com.griffteruk.kata.socialnetwork.command.CommandReader;
+import com.griffteruk.kata.socialnetwork.command.EmptyCommand;
+import com.griffteruk.kata.socialnetwork.io.TextConsole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

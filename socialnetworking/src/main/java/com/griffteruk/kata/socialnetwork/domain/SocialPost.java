@@ -1,4 +1,4 @@
-package com.griffteruk.kata.socialnetwork.unit.domain;
+package com.griffteruk.kata.socialnetwork.domain;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -17,16 +17,16 @@ public class SocialPost implements Post {
     private String message;
     private LocalDateTime timestamp;
 
+    public SocialPost(String message)
+    {
+        this(Clock.systemDefaultZone(), message);
+    }
+
     public SocialPost(Clock clock, String message)
     {
         this.clock = clock;
         this.message = message;
         this.timestamp = LocalDateTime.now(clock);
-    }
-
-    public SocialPost(String message)
-    {
-        this(Clock.systemDefaultZone(), message);
     }
 
     public String getMessage() {

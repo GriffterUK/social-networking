@@ -1,8 +1,10 @@
 package com.griffteruk.kata.socialnetwork.unit.command;
 
-import com.griffteruk.kata.socialnetwork.unit.domain.*;
+import com.griffteruk.kata.socialnetwork.command.FollowCommand;
+import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
+import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
 import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
-import com.griffteruk.kata.socialnetwork.unit.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -10,9 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 
 import static com.griffteruk.kata.socialnetwork.unit.common.Lists.EMPTY_LIST_OF_STRINGS;
-import static com.griffteruk.kata.socialnetwork.unit.common.Users.NON_EXISTENT_USER_NAME;
-import static com.griffteruk.kata.socialnetwork.unit.common.Users.SOME_EXISTING_USER_NAME;
-import static com.griffteruk.kata.socialnetwork.unit.common.Users.SOME_OTHER_EXISTING_USER_NAME;
+import static com.griffteruk.kata.socialnetwork.unit.common.Users.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;

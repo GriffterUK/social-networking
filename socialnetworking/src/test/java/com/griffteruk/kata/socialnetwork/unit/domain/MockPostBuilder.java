@@ -1,5 +1,7 @@
 package com.griffteruk.kata.socialnetwork.unit.domain;
 
+import com.griffteruk.kata.socialnetwork.domain.Post;
+
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;

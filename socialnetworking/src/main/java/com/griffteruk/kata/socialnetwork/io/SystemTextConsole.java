@@ -1,4 +1,4 @@
-package com.griffteruk.kata.socialnetwork.unit.io;
+package com.griffteruk.kata.socialnetwork.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,10 +1,13 @@
 package com.griffteruk.kata.socialnetwork.unit.domain;
 
+import com.griffteruk.kata.socialnetwork.domain.SocialPost;
+import com.griffteruk.kata.socialnetwork.domain.SocialUser;
+import com.griffteruk.kata.socialnetwork.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by User on 22/10/2017.

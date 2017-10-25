@@ -1,6 +1,7 @@
 package com.griffteruk.kata.socialnetwork.unit.command;
 
-import com.griffteruk.kata.socialnetwork.unit.repositories.UserRepository;
+import com.griffteruk.kata.socialnetwork.command.*;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -10,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class SocialCommandFactoryShould {

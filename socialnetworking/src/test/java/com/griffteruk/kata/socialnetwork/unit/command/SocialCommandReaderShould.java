@@ -1,5 +1,7 @@
 package com.griffteruk.kata.socialnetwork.unit.command;
 
+import com.griffteruk.kata.socialnetwork.command.CommandFactory;
+import com.griffteruk.kata.socialnetwork.command.SocialCommandReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -1,8 +1,11 @@
 package com.griffteruk.kata.socialnetwork.unit.command;
 
-import com.griffteruk.kata.socialnetwork.unit.domain.*;
+import com.griffteruk.kata.socialnetwork.command.ReadCommand;
+import com.griffteruk.kata.socialnetwork.domain.User;
+import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
+import com.griffteruk.kata.socialnetwork.unit.domain.MockPostBuilder;
+import com.griffteruk.kata.socialnetwork.unit.domain.MockUserBuilder;
 import com.griffteruk.kata.socialnetwork.unit.repositories.MockUserRepositoryBuilder;
-import com.griffteruk.kata.socialnetwork.unit.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
