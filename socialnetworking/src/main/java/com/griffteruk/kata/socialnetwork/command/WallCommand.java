@@ -1,6 +1,6 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import com.griffteruk.kata.socialnetwork.domain.Post;
+import com.griffteruk.kata.socialnetwork.domain.UserPost;
 import com.griffteruk.kata.socialnetwork.domain.User;
 import com.griffteruk.kata.socialnetwork.repositories.UserRepository;
 
@@ -13,31 +13,6 @@ import java.util.stream.Collectors;
  * Created by Lee Griffiths on 21/10/2017.
  */
 public class WallCommand implements Command {
-
-    class UserPost
-    {
-        private final User user;
-        private final Post post;
-
-        public UserPost(User user, Post post)
-        {
-            this.user = user;
-            this.post = post;
-        }
-
-        public User getUser() {
-            return user;
-        }
-        public Post getPost() {
-            return post;
-        }
-
-        @Override
-        public String toString()
-        {
-            return getUser().getName() + " : " + getPost().getMessage();
-        }
-    }
 
     private static final List<String> EMPTY_LIST = new ArrayList<>();
 
