@@ -1,7 +1,7 @@
 package com.griffteruk.kata.socialnetwork.command;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Lee Griffiths on 21/10/2017.
@@ -9,7 +9,7 @@ import java.util.List;
 public class SocialCommandReader implements CommandReader {
 
     private static final String EMPTY_STRING = "";
-    private static final String BY_SPACES = " ";
+    private static final Pattern commandPattern = Pattern.compile("^\\s*(\\S+)\\s*(->|follows|wall|$)\\s*($|.+)", Pattern.CASE_INSENSITIVE);
 
     private CommandFactory commandFactory;
 
@@ -18,31 +18,21 @@ public class SocialCommandReader implements CommandReader {
     }
 
     public Command parse(String commandText) {
-        List<String> commandArguments =
-                Arrays.asList(
-                        commandText.split(BY_SPACES));
 
-        String user = elementOrDefault(commandArguments, 0, EMPTY_STRING);
-        String operation = elementOrDefault(commandArguments, 1, EMPTY_STRING);
+        Matcher patternMatcher = commandPattern.matcher(commandText);
 
-        String message = commandArguments.size() >= 3 ?
-                joinListOfStringsWithSpaces(
-                        subsetOfListStartingFrom(commandArguments, 2))
-                : EMPTY_STRING;
+        if (patternMatcher.matches()) {
+            return commandFor(
+                    matcherGroupValueOrDefault(patternMatcher, 1, EMPTY_STRING),
+                    matcherGroupValueOrDefault(patternMatcher, 2, EMPTY_STRING),
+                    matcherGroupValueOrDefault(patternMatcher, 3, EMPTY_STRING));
+        }
 
-        return commandFor(user, operation, message);
+        return commandFor(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING);
     }
 
-    private List<String> subsetOfListStartingFrom(List<String> list, int startingFrom) {
-        return list.subList(startingFrom, list.size());
-    }
-
-    private String joinListOfStringsWithSpaces(List<String> commandArguments) {
-        return String.join(BY_SPACES, commandArguments);
-    }
-
-    private String elementOrDefault(List<String> elementList, int index, String defaultIfNotExists) {
-        return (elementList.size() > index) ? elementList.get(index) : defaultIfNotExists;
+    private String matcherGroupValueOrDefault(Matcher matcher, int groupIndex, String defaultValue) {
+        return matcher.groupCount() >= groupIndex ? matcher.group(groupIndex) : defaultValue;
     }
 
     private Command commandFor(String user, String operation, String message) {

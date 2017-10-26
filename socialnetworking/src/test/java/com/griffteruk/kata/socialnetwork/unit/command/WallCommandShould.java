@@ -55,9 +55,24 @@ public class WallCommandShould {
                 )
                 .build();
 
+        User userThatIsNotFollowed = aMockUser()
+                .withName(SOME_OTHER_EXISTING_USER_NAME)
+                .withPosts(
+                        aMockPost()
+                                .withMessage(FIRST_POST_OF_EXISTING_USER)
+                                .withTimestamp(NOW)
+                                .build(),
+                        aMockPost()
+                                .withMessage(SECOND_POST_OF_EXISTING_USER)
+                                .withTimestamp(TWO_SECONDS_LATER)
+                                .build()
+                )
+                .build();
+
         List<String> resultOfWallCommand = processWallCommandFor(
                 aMockUserRepository()
                         .thatFindsUser(user)
+                        .thatFindsUser(userThatIsNotFollowed)
                         .build(),
                 SOME_EXISTING_USER_NAME);
 

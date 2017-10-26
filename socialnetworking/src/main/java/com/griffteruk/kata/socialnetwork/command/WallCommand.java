@@ -27,13 +27,13 @@ public class WallCommand implements Command {
     @Override
     public List<String> process() {
 
-        Optional<User> optionalUser = userRepository.findUserByName(userName);
+        Optional<User> optionalUser = findUserByName(userName);
         if (optionalUser.isPresent()) {
 
             User user = optionalUser.get();
 
             List<UserPost> userPostsInterestedIn =
-                    combinePosts(
+                    collectPosts(
                             userPostsForUser(user),
                             postsFromUsersFollowedBy(user));
 
@@ -41,6 +41,10 @@ public class WallCommand implements Command {
         }
 
         return EMPTY_LIST;
+    }
+
+    private Optional<User> findUserByName(String userName) {
+        return userRepository.findUserByName(userName);
     }
 
     private List<UserPost> userPostsForUser(User user) {
@@ -59,7 +63,7 @@ public class WallCommand implements Command {
                 .collect(Collectors.toList());
     }
 
-    private List<UserPost> combinePosts(List<UserPost>... listsOfUsersPosts) {
+    private List<UserPost> collectPosts(List<UserPost>... listsOfUsersPosts) {
         return Arrays.stream(listsOfUsersPosts)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
