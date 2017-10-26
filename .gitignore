@@ -4,3 +4,5 @@ socialnetworking/\.idea/
 socialnetworking/target/
 
 *.iml
+
+socialnetworking/out/

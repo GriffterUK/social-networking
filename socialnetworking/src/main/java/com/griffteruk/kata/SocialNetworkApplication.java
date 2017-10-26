@@ -12,7 +12,7 @@ import com.griffteruk.kata.socialnetwork.repositories.SocialUserRepository;
  * - the console twitter
  */
 
-public class Application {
+public class SocialNetworkApplication {
     public static void main(String[] args) {
         displayUsage();
 

@@ -25,7 +25,7 @@ public class SocialConsole {
 
             String userInput = getUserInput();
 
-            Command command = commandReader.parse(userInput);
+            Command command = parseUserInputToCommand(userInput);
 
             if (commandIsInvalidOrEmpty(command)) {
                 return;
@@ -35,6 +35,10 @@ public class SocialConsole {
                     command.process()
             );
         }
+    }
+
+    private Command parseUserInputToCommand(String userInput) {
+        return commandReader.parse(userInput);
     }
 
     private String getUserInput() {
