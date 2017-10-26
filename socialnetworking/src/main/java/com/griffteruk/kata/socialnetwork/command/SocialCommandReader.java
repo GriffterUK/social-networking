@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 public class SocialCommandReader implements CommandReader {
 
     private static final String EMPTY_STRING = "";
-    private static final Pattern commandPattern = Pattern.compile("^\\s*(\\S+)\\s*(->|follows|wall|$)\\s*($|.+)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern commandPattern =
+            Pattern.compile("^\\s*(\\S+)\\s*(->|follows|wall|$)\\s*($|.+)", Pattern.CASE_INSENSITIVE);
 
     private CommandFactory commandFactory;
 
